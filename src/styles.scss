@@ -1,0 +1,44 @@
+:root {
+  color-scheme: light;
+  --bg: #f3eee4;
+  --text: #1d2a27;
+  --muted: #4f5e5d;
+  --accent-green: #6f8d7e;
+  --accent-blue: #4f7680;
+  --focus: #2b6f7b;
+  --font-serif: 'Cormorant Garamond', 'Baskerville', 'Times New Roman', serif;
+  --font-sans: 'Inter', 'Avenir Next', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  letter-spacing: 0.01em;
+}
+
+p {
+  color: var(--muted);
+}
+
+a,
+button,
+[tabindex='0'] {
+  &:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 0.4rem;
+  }
+}

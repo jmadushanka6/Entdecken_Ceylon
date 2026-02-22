@@ -1,0 +1,86 @@
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__overlay">
+      <p class="eyebrow">Sri Lanka Edition</p>
+      <h1 id="hero-title">Calm journeys across tea hills, coasts, and timeless streets.</h1>
+      <p class="lede">
+        A premium, slow-travel magazine experience for curious travelers seeking texture, ritual, and quiet luxury.
+      </p>
+      <div class="hero__cta-row">
+        <a class="btn btn--primary" routerLink="/" aria-label="Read featured stories">Read stories</a>
+        <a class="btn btn--ghost" href="#guides" aria-label="Jump to destination guides">Browse guides</a>
+      </div>
+    </div>
+    <picture>
+      <source
+        type="image/avif"
+        srcset="https://images.unsplash.com/photo-1515023115689-589c33041d3c?auto=format&fit=crop&w=1280&fm=avif 1280w, https://images.unsplash.com/photo-1515023115689-589c33041d3c?auto=format&fit=crop&w=1920&fm=avif 1920w"
+        sizes="100vw"
+      />
+      <source
+        type="image/webp"
+        srcset="https://images.unsplash.com/photo-1515023115689-589c33041d3c?auto=format&fit=crop&w=1280&fm=webp 1280w, https://images.unsplash.com/photo-1515023115689-589c33041d3c?auto=format&fit=crop&w=1920&fm=webp 1920w"
+        sizes="100vw"
+      />
+      <img
+        src="https://images.unsplash.com/photo-1515023115689-589c33041d3c?auto=format&fit=crop&w=1600&q=80"
+        alt="Train passing through lush tea country in Sri Lanka"
+        width="1600"
+        height="900"
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
+      />
+    </picture>
+  </section>
+
+  <section id="guides" class="grid" aria-label="Featured guides">
+    <article class="card" tabindex="0">
+      <img
+        src="https://images.unsplash.com/photo-1582639232065-0b3cdb2720f0?auto=format&fit=crop&w=900&q=80"
+        srcset="https://images.unsplash.com/photo-1582639232065-0b3cdb2720f0?auto=format&fit=crop&w=450&fm=webp 450w, https://images.unsplash.com/photo-1582639232065-0b3cdb2720f0?auto=format&fit=crop&w=900&fm=webp 900w"
+        sizes="(max-width: 768px) 100vw, 33vw"
+        alt="Colonial architecture in Galle Fort"
+        width="900"
+        height="600"
+        loading="lazy"
+        decoding="async"
+      />
+      <h2>Galle, at golden hour</h2>
+      <p>Walk sea walls and restored villas in a coastal city shaped by trade winds and history.</p>
+      <a href="#" class="text-link">See itinerary</a>
+    </article>
+
+    <article class="card" tabindex="0">
+      <img
+        src="https://images.unsplash.com/photo-1578321272176-b7bbc0679853?auto=format&fit=crop&w=900&q=80"
+        srcset="https://images.unsplash.com/photo-1578321272176-b7bbc0679853?auto=format&fit=crop&w=450&fm=avif 450w, https://images.unsplash.com/photo-1578321272176-b7bbc0679853?auto=format&fit=crop&w=900&fm=avif 900w"
+        sizes="(max-width: 768px) 100vw, 33vw"
+        alt="Tea terraces surrounding a mountain trail"
+        width="900"
+        height="600"
+        loading="lazy"
+        decoding="async"
+      />
+      <h2>Highland tea rituals</h2>
+      <p>Find mountain lodges, cloud forests, and serene rail routes through emerald plantations.</p>
+      <a href="#" class="text-link">Plan a stay</a>
+    </article>
+
+    <article class="card" tabindex="0">
+      <img
+        src="https://images.unsplash.com/photo-1612862862126-865765df2ded?auto=format&fit=crop&w=900&q=80"
+        srcset="https://images.unsplash.com/photo-1612862862126-865765df2ded?auto=format&fit=crop&w=450&fm=webp 450w, https://images.unsplash.com/photo-1612862862126-865765df2ded?auto=format&fit=crop&w=900&fm=webp 900w"
+        sizes="(max-width: 768px) 100vw, 33vw"
+        alt="Palm-lined beach with gentle surf"
+        width="900"
+        height="600"
+        loading="lazy"
+        decoding="async"
+      />
+      <h2>South coast slow days</h2>
+      <p>Balance early surf, boutique stays, and candlelit dinners by the waterline.</p>
+      <a href="#" class="text-link">Open guide</a>
+    </article>
+  </section>
+</main>
