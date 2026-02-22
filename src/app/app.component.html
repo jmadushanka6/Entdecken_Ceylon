@@ -2,12 +2,7 @@
   <section class="hero" aria-label="Einführung">
     <img
       class="hero__image"
-      src="https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=2000&q=70"
-      srcset="
-        https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=900&q=70 900w,
-        https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=1400&q=70 1400w,
-        https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=2000&q=70 2000w
-      "
+      src="/assets/images/hero-sri-lanka.svg"
       sizes="100vw"
       alt="Morgenstimmung über den Bergen Sri Lankas"
       fetchpriority="high"
@@ -15,6 +10,15 @@
     />
     <div class="hero__overlay"></div>
     <div class="hero__content container">
+      <button
+        class="theme-toggle"
+        type="button"
+        (click)="toggleTheme()"
+        [attr.aria-pressed]="isDarkTheme"
+        [attr.aria-label]="isDarkTheme ? 'Helles Theme aktivieren' : 'Dunkles Theme aktivieren'"
+      >
+        {{ isDarkTheme ? '☀️ Helles Theme' : '🌙 Dunkles Theme' }}
+      </button>
       <h1>Sri Lanka entdecken – entspannt & gut vorbereitet reisen</h1>
       <p>Inspiration, Routen und praktische Tipps für Ihre Reiseplanung.</p>
       <div class="hero__actions">
@@ -27,15 +31,15 @@
   <section class="section container" aria-label="Stimmungen">
     <div class="mood-grid">
       <a class="mood-tile" href="/orte/hochland">
-        <img src="https://images.unsplash.com/photo-1624277341841-54531a529910?auto=format&fit=crop&w=1000&q=70" alt="Nebeliger Teeberg im Hochland" loading="lazy" decoding="async" />
+        <img src="/assets/images/highlands.svg" alt="Nebeliger Teeberg im Hochland" loading="lazy" decoding="async" />
         <span>Natur & Hochland</span>
       </a>
       <a class="mood-tile" href="/orte/westen-sueden">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=70" alt="Sandstrand und Palmen an der Südküste" loading="lazy" decoding="async" />
+        <img src="/assets/images/beach.svg" alt="Sandstrand und Palmen an der Südküste" loading="lazy" decoding="async" />
         <span>Strände & Süden</span>
       </a>
       <a class="mood-tile" href="/orte/kultur-dreieck">
-        <img src="https://images.unsplash.com/photo-1566438480900-0609be27a4be?auto=format&fit=crop&w=1000&q=70" alt="Historischer Tempel im Kulturdreieck" loading="lazy" decoding="async" />
+        <img src="/assets/images/culture.svg" alt="Historischer Tempel im Kulturdreieck" loading="lazy" decoding="async" />
         <span>Kultur & Geschichte</span>
       </a>
     </div>
@@ -52,12 +56,7 @@
   </section>
 
   <section class="section container featured-route" aria-label="Empfohlene Route">
-    <img
-      src="https://images.unsplash.com/photo-1506973035872-a4ec16b8d3e3?auto=format&fit=crop&w=1200&q=70"
-      alt="Küstenstraße in Sri Lanka"
-      loading="lazy"
-      decoding="async"
-    />
+    <img src="/assets/images/route.svg" alt="Küstenstraße in Sri Lanka" loading="lazy" decoding="async" />
     <div>
       <h2>Unsere empfohlene 14-Tage-Route</h2>
       <p>Von Kulturstätten bis zur Südküste – eine ausgewogene Reise durch Sri Lanka.</p>
@@ -82,6 +81,18 @@
         <span>{{ guide.title }}</span>
       </a>
     </div>
+  </section>
+
+  <section class="section section--narrow container" aria-label="Häufige Fragen">
+    <h2>Häufige Fragen zur Sri-Lanka-Reise</h2>
+    <details>
+      <summary>Wann ist die beste Reisezeit für Sri Lanka?</summary>
+      <p>Der Südwesten ist oft von Dezember bis April ideal, der Osten von Mai bis September.</p>
+    </details>
+    <details>
+      <summary>Wie viel Budget braucht man für 2 Wochen?</summary>
+      <p>Je nach Stil planen viele Reisende zwischen 1.200 und 2.500 Euro pro Person.</p>
+    </details>
   </section>
 
   <section class="section section--narrow container" aria-label="Zuletzt aktualisiert">
