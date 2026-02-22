@@ -1,19 +1,104 @@
-<div class="app-shell">
-  <header class="app-header">
-    <div class="content-wrap">
-      <h1>Entdecken Ceylon</h1>
+<div class="home-page">
+  <section class="hero" aria-label="Einführung">
+    <img
+      class="hero__image"
+      src="https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=2000&q=70"
+      srcset="
+        https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=900&q=70 900w,
+        https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=1400&q=70 1400w,
+        https://images.unsplash.com/photo-1618424191497-157f25b6ddd5?auto=format&fit=crop&w=2000&q=70 2000w
+      "
+      sizes="100vw"
+      alt="Morgenstimmung über den Bergen Sri Lankas"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <div class="hero__overlay"></div>
+    <div class="hero__content container">
+      <h1>Sri Lanka entdecken – entspannt & gut vorbereitet reisen</h1>
+      <p>Inspiration, Routen und praktische Tipps für Ihre Reiseplanung.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="/reise-planen">Reise planen</a>
+        <a class="btn btn--secondary" href="/routen">Routen ansehen</a>
+      </div>
     </div>
-  </header>
+  </section>
 
-  <main class="app-main">
-    <div class="content-wrap">
-      <router-outlet></router-outlet>
+  <section class="section container" aria-label="Stimmungen">
+    <div class="mood-grid">
+      <a class="mood-tile" href="/orte/hochland">
+        <img src="https://images.unsplash.com/photo-1624277341841-54531a529910?auto=format&fit=crop&w=1000&q=70" alt="Nebeliger Teeberg im Hochland" loading="lazy" decoding="async" />
+        <span>Natur & Hochland</span>
+      </a>
+      <a class="mood-tile" href="/orte/westen-sueden">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=70" alt="Sandstrand und Palmen an der Südküste" loading="lazy" decoding="async" />
+        <span>Strände & Süden</span>
+      </a>
+      <a class="mood-tile" href="/orte/kultur-dreieck">
+        <img src="https://images.unsplash.com/photo-1566438480900-0609be27a4be?auto=format&fit=crop&w=1000&q=70" alt="Historischer Tempel im Kulturdreieck" loading="lazy" decoding="async" />
+        <span>Kultur & Geschichte</span>
+      </a>
     </div>
-  </main>
+  </section>
 
-  <footer class="app-footer">
-    <div class="content-wrap">
-      <small>&copy; {{ currentYear }} Entdecken Ceylon</small>
+  <section class="section section--soft container" aria-label="Reiseplanung">
+    <h2>Ihre Reise Schritt für Schritt planen</h2>
+    <div class="steps-grid">
+      <a class="step-card" *ngFor="let step of planningSteps" [href]="step.href">
+        <span class="step-card__icon" aria-hidden="true">{{ step.icon }}</span>
+        <span>{{ step.label }}</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section container featured-route" aria-label="Empfohlene Route">
+    <img
+      src="https://images.unsplash.com/photo-1506973035872-a4ec16b8d3e3?auto=format&fit=crop&w=1200&q=70"
+      alt="Küstenstraße in Sri Lanka"
+      loading="lazy"
+      decoding="async"
+    />
+    <div>
+      <h2>Unsere empfohlene 14-Tage-Route</h2>
+      <p>Von Kulturstätten bis zur Südküste – eine ausgewogene Reise durch Sri Lanka.</p>
+      <a class="link-cta" href="/routen/14-tage">Route im Detail ansehen</a>
+    </div>
+  </section>
+
+  <section class="section section--narrow container" aria-label="Warum dieser Guide">
+    <h2>Warum dieser Guide?</h2>
+    <p>
+      Sri Lanka ist vielfältig, intensiv und manchmal überwältigend. Dieser Guide hilft Ihnen, Klarheit zu gewinnen – ohne Verkaufsdruck,
+      ohne Hektik.
+    </p>
+  </section>
+
+  <section class="section container" aria-label="Beliebte Guides">
+    <h2>Beliebte Guides</h2>
+    <div class="guides-grid">
+      <a class="guide-card" *ngFor="let guide of guideCards" [href]="guide.href">
+        <img [src]="guide.image" [alt]="guide.title" loading="lazy" decoding="async" />
+        <small>{{ guide.label }}</small>
+        <span>{{ guide.title }}</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section section--narrow container" aria-label="Zuletzt aktualisiert">
+    <h2>Zuletzt aktualisiert</h2>
+    <div class="updates-list">
+      <p><span>März 2026</span> Visum-Info aktualisiert</p>
+      <p><span>Februar 2026</span> Beste Reisezeit Hinweise aktualisiert</p>
+      <p><span>Januar 2026</span> Kostenübersicht geprüft</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <a href="/impressum">Impressum</a>
+      <a href="/datenschutz">Datenschutz</a>
+      <a href="/kontakt">Kontakt</a>
+      <a href="/sitemap">Sitemap</a>
     </div>
   </footer>
 </div>
