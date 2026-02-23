@@ -1,0 +1,63 @@
+.dynamic-page {
+  --page-accent: var(--link);
+  --page-bg: var(--bg);
+  --page-surface: var(--surface-card);
+  --page-text: var(--text);
+  --page-description: var(--muted);
+
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(1rem, 2.5vw, 2rem);
+  border-radius: 1rem;
+  background: var(--page-bg);
+  color: var(--page-text);
+}
+
+.dynamic-page__hero {
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.dynamic-page__hero-image {
+  width: 100%;
+  min-height: clamp(14rem, 42vw, 24rem);
+  object-fit: cover;
+  border-radius: 0.85rem;
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+  line-height: 1.1;
+  color: var(--page-text);
+}
+
+.dynamic-page__description {
+  margin: 0;
+  max-width: 70ch;
+
+  p {
+    margin: 0;
+    color: var(--page-description);
+    line-height: 1.8;
+    font-size: clamp(1rem, 0.4vw + 0.95rem, 1.2rem);
+  }
+}
+
+.dynamic-page__body {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: var(--page-surface);
+  border: 1px solid color-mix(in srgb, var(--page-accent) 24%, transparent);
+  border-radius: 0.8rem;
+
+  :where(h2, h3) {
+    color: var(--page-text);
+    margin-top: 0;
+  }
+
+  :where(a) {
+    color: var(--page-accent);
+  }
+}
