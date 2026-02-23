@@ -1,108 +1,122 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-export interface DynamicPageThemeTokens {
-  accent?: string;
-  background?: string;
-  surface?: string;
-  text?: string;
-  description?: string;
-}
-
-export interface DynamicPageContent {
-  id?: string;
+interface DynamicPageData {
   title: string;
-  heroImage: string;
-  heroAlt: string;
   description: string;
-  bodyHtml?: string;
-  customCss?: string;
-  theme?: DynamicPageThemeTokens;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 @Component({
   selector: 'app-dynamic-page',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './dynamic-page.component.html',
-  styleUrl: './dynamic-page.component.scss'
+  imports: [CommonModule, RouterLink],
+  template: `
+    <main class="dynamic-page">
+      <div class="container">
+        <p class="dynamic-page__label">Inhalt in Vorbereitung</p>
+        <h1>{{ pageData?.title ?? fallbackMetadata.title }}</h1>
+        <p>{{ pageData?.description ?? fallbackMetadata.description }}</p>
+        <a routerLink="/">Zurück zur Startseite</a>
+      </div>
+    </main>
+  `,
+  styles: [
+    `
+      .dynamic-page {
+        padding: 3rem 0;
+      }
+
+      .container {
+        width: min(900px, 92vw);
+        margin: 0 auto;
+      }
+
+      .dynamic-page__label {
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+    `
+  ]
 })
-export class DynamicPageComponent implements OnChanges {
-  @Input({ required: true }) page!: DynamicPageContent;
+export class DynamicPageComponent implements OnInit, OnDestroy {
+  pageData: DynamicPageData | null = null;
 
-  protected wrapperClass = 'dynamic-page--default';
-  protected safeBodyHtml: string | null = null;
-  protected safeScopedCss = '';
+  readonly fallbackMetadata: DynamicPageData = {
+    title: 'Entdecken Ceylon',
+    description: 'Reiseinhalte werden geladen. Bitte schauen Sie in Kürze wieder vorbei.',
+    seoTitle: 'Entdecken Ceylon | Sri Lanka Reisetipps',
+    seoDescription: 'Praktische Sri Lanka Reisetipps, Inspiration und aktuelle Hinweise für Ihre Reiseplanung.'
+  };
 
-  constructor(private readonly sanitizer: DomSanitizer) {}
+  private readonly pageDataBySlug: Record<string, DynamicPageData> = {
+    'beste-reisezeit': {
+      title: 'Beste Reisezeit für Sri Lanka',
+      description: 'Wann sich welche Region besonders lohnt und worauf Sie bei Monsunzeiten achten sollten.',
+      seoTitle: 'Beste Reisezeit Sri Lanka | Entdecken Ceylon',
+      seoDescription: 'Monatsübersicht für Wetter, Regenzeiten und optimale Reiseplanung für Sri Lanka.'
+    },
+    '2-wochen-budget': {
+      title: 'Sri Lanka Kosten für 2 Wochen',
+      description: 'Budgetbeispiele für Unterkünfte, Transport und Aktivitäten im Überblick.'
+    },
+    'ist-sri-lanka-sicher': {
+      title: 'Ist Sri Lanka sicher?',
+      description: 'Sicherheitslage, Gesundheitstipps und Verhaltensempfehlungen für unterwegs.'
+    }
+  };
 
-  ngOnChanges(): void {
-    this.wrapperClass = `dynamic-page--${this.toSafeId(this.page.id ?? this.page.title)}`;
+  private routeSubscription?: Subscription;
 
-    this.safeBodyHtml = this.page.bodyHtml
-      ? this.sanitizer.sanitize(SecurityContext.HTML, this.page.bodyHtml)
-      : null;
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly title: Title,
+    private readonly meta: Meta,
+    @Inject(DOCUMENT) private readonly document: Document
+  ) {}
 
-    this.safeScopedCss = this.page.customCss
-      ? this.sanitizeCss(this.scopeCss(this.page.customCss, `.${this.wrapperClass}`))
-      : '';
-  }
-
-  protected get cssVariables(): Record<string, string | null> {
-    return {
-      '--page-accent': this.page.theme?.accent ?? null,
-      '--page-bg': this.page.theme?.background ?? null,
-      '--page-surface': this.page.theme?.surface ?? null,
-      '--page-text': this.page.theme?.text ?? null,
-      '--page-description': this.page.theme?.description ?? null
-    };
-  }
-
-  /**
-   * Trust model: custom CSS should come from trusted content editors only.
-   * We still scope selectors and block dangerous constructs before injection.
-   */
-  private sanitizeCss(css: string): string {
-    const stripped = css
-      .replace(/@import/gi, '')
-      .replace(/expression\s*\(/gi, '')
-      .replace(/javascript\s*:/gi, '')
-      .replace(/behavior\s*:/gi, '')
-      .replace(/-moz-binding\s*:/gi, '');
-
-    return this.sanitizer.sanitize(SecurityContext.STYLE, stripped) ?? '';
-  }
-
-  private scopeCss(css: string, scopeSelector: string): string {
-    const normalized = css
-      .replace(/\/\*[\s\S]*?\*\//g, '')
-      .trim();
-
-    return normalized.replace(/(^|})\s*([^@{}][^{]+)\{/g, (_match, prefix: string, selectors: string) => {
-      const scoped = selectors
-        .split(',')
-        .map((selector) => {
-          const trimmed = selector.trim();
-          if (!trimmed) {
-            return '';
-          }
-
-          return trimmed.startsWith(scopeSelector) ? trimmed : `${scopeSelector} ${trimmed}`;
-        })
-        .filter(Boolean)
-        .join(', ');
-
-      return `${prefix} ${scoped} {`;
+  ngOnInit(): void {
+    this.routeSubscription = this.route.paramMap.subscribe((paramMap) => {
+      const slug = paramMap.get('slug') ?? '';
+      this.pageData = this.pageDataBySlug[slug] ?? null;
+      this.updateMetadata(this.pageData);
     });
   }
 
-  private toSafeId(value: string): string {
-    return value
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '') || 'page';
+  ngOnDestroy(): void {
+    this.routeSubscription?.unsubscribe();
+  }
+
+  private updateMetadata(pageData: DynamicPageData | null): void {
+    const metadata = pageData ?? this.fallbackMetadata;
+
+    this.title.setTitle(metadata.seoTitle || metadata.title);
+    this.meta.updateTag({
+      name: 'description',
+      content: metadata.seoDescription || metadata.description
+    });
+
+    this.updateCanonicalUrl();
+  }
+
+  private updateCanonicalUrl(): void {
+    const currentPath = this.router.url.split('?')[0] || '/';
+    const canonicalUrl = `${this.document.location.origin}${currentPath}`;
+
+    let canonicalElement = this.document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+
+    if (!canonicalElement) {
+      canonicalElement = this.document.createElement('link');
+      canonicalElement.setAttribute('rel', 'canonical');
+      this.document.head.appendChild(canonicalElement);
+    }
+
+    canonicalElement.setAttribute('href', canonicalUrl);
   }
 }
