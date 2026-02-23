@@ -29,6 +29,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
   private static readonly ADMIN_PASSWORD = 'admin';
 
   isSubmitting = false;
+  isContentLoading = false;
   successMessage = '';
   errorMessage = '';
   loginErrorMessage = '';
@@ -61,7 +62,12 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     private readonly contentService: ContentService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.isContentLoading = true;
+    await this.contentService.ensureInitialized();
+    this.pageForm.controls.uri.updateValueAndValidity({ emitEvent: false });
+    this.isContentLoading = false;
+
     if (this.isAuthenticated) {
       this.restoreDraft();
       this.startDraftPersistence();

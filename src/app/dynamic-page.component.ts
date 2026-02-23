@@ -16,6 +16,8 @@ import { ContentPage, ContentService } from './content.service';
 export class DynamicPageComponent implements OnInit, OnDestroy {
   page: ContentPage | null = null;
   safeBodyHtml: SafeHtml | null = null;
+  isPageLoading = true;
+  isHeroImageLoading = false;
 
   private routeSubscription?: Subscription;
 
@@ -30,14 +32,20 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.routeSubscription = this.route.paramMap.subscribe((paramMap) => {
+    this.routeSubscription = this.route.paramMap.subscribe(async (paramMap) => {
+      this.isPageLoading = true;
       const slug = paramMap.get('slug') ?? '';
+
+      await this.contentService.ensureInitialized();
+
       this.page = this.contentService.getPageByUri(slug) ?? null;
       this.safeBodyHtml = this.page?.bodyHtml
         ? this.sanitizer.bypassSecurityTrustHtml(this.page.bodyHtml)
         : null;
+      this.isHeroImageLoading = !!this.page?.heroImageUrl;
 
       this.updateMetadata();
+      this.isPageLoading = false;
     });
   }
 
@@ -47,6 +55,10 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
 
   get currentCustomCss(): string {
     return this.page?.customCss ?? '';
+  }
+
+  onHeroImageLoaded(): void {
+    this.isHeroImageLoading = false;
   }
 
   private updateMetadata(): void {
