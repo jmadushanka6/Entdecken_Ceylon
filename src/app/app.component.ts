@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
@@ -9,8 +9,25 @@ import { Meta, Title } from '@angular/platform-browser';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   isDarkTheme = false;
+  currentSlideIndex = 0;
+  private sliderTimer?: ReturnType<typeof setInterval>;
+
+  readonly heroSlides = [
+    {
+      src: '/assets/images/hero-sri-lanka.svg',
+      alt: 'Morgenstimmung über den Bergen Sri Lankas'
+    },
+    {
+      src: '/assets/images/beach.svg',
+      alt: 'Palmen und Strand an der Südküste von Sri Lanka'
+    },
+    {
+      src: '/assets/images/highlands.svg',
+      alt: 'Teeplantagen und Hügel im Hochland von Sri Lanka'
+    }
+  ];
 
   readonly planningSteps = [
     { label: 'Beste Reisezeit', href: '/reise-planen/beste-reisezeit', icon: '☀️' },
@@ -68,6 +85,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeTheme();
+    this.startSlider();
+
     const pageTitle = 'Sri Lanka entdecken – entspannt & gut vorbereitet reisen';
     const description =
       'Inspiration, Routen und praktische Tipps für Ihre Reiseplanung in Sri Lanka – ruhig, strukturiert und ohne Verkaufsdruck.';
@@ -90,9 +109,47 @@ export class AppComponent implements OnInit {
     this.injectJsonLd(pageTitle, description, pageUrl);
   }
 
+  ngOnDestroy(): void {
+    this.stopSlider();
+  }
+
   toggleTheme(): void {
     this.setTheme(!this.isDarkTheme);
     localStorage.setItem('entdecken-theme', this.isDarkTheme ? 'dark' : 'light');
+  }
+
+  previousSlide(): void {
+    this.currentSlideIndex =
+      (this.currentSlideIndex - 1 + this.heroSlides.length) % this.heroSlides.length;
+    this.restartSlider();
+  }
+
+  nextSlide(): void {
+    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
+    this.restartSlider();
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlideIndex = index;
+    this.restartSlider();
+  }
+
+  private startSlider(): void {
+    this.sliderTimer = setInterval(() => {
+      this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
+    }, 5000);
+  }
+
+  private stopSlider(): void {
+    if (this.sliderTimer) {
+      clearInterval(this.sliderTimer);
+      this.sliderTimer = undefined;
+    }
+  }
+
+  private restartSlider(): void {
+    this.stopSlider();
+    this.startSlider();
   }
 
   private initializeTheme(): void {
