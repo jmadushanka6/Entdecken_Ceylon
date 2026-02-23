@@ -55,6 +55,7 @@
       <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['uriTaken']">
         This URI is already in use.
       </p>
+      <p *ngIf="isContentLoading">Loading existing pages...</p>
 
       <label>
         Title
@@ -87,7 +88,7 @@
         <textarea rows="8" formControlName="bodyHtml" placeholder="<h2>Welcome</h2><p>...</p>"></textarea>
       </label>
 
-      <button type="submit" [disabled]="isSubmitting">
+      <button type="submit" [disabled]="isSubmitting || isContentLoading">
         {{ isSubmitting ? 'Saving...' : 'Save page' }}
       </button>
     </form>

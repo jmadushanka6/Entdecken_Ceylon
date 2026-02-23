@@ -1,25 +1,42 @@
-<main class="dynamic-page-wrapper" *ngIf="page; else pageNotFound">
-  <article class="dynamic-page">
-    <style *ngIf="currentCustomCss" [textContent]="currentCustomCss"></style>
-
-    <header class="dynamic-page__hero">
-      <img
-        *ngIf="page.heroImageUrl"
-        class="dynamic-page__hero-image"
-        [src]="page.heroImageUrl"
-        [alt]="page.title"
-        decoding="async"
-      />
-      <h1>{{ page.title }}</h1>
-    </header>
-
-    <section class="dynamic-page__description">
-      <p>{{ page.description }}</p>
-    </section>
-
-    <section *ngIf="safeBodyHtml" class="dynamic-page__body" [innerHTML]="safeBodyHtml"></section>
+<main class="dynamic-page-wrapper" *ngIf="isPageLoading; else loadedState">
+  <article class="dynamic-page dynamic-page--loader">
+    <div class="loader"></div>
+    <p>Loading page content...</p>
   </article>
 </main>
+
+<ng-template #loadedState>
+  <main class="dynamic-page-wrapper" *ngIf="page; else pageNotFound">
+    <article class="dynamic-page">
+      <style *ngIf="currentCustomCss" [textContent]="currentCustomCss"></style>
+
+      <header class="dynamic-page__hero">
+        <div class="dynamic-page__hero-loader" *ngIf="isHeroImageLoading">
+          <div class="loader"></div>
+          <p>Loading image...</p>
+        </div>
+
+        <img
+          *ngIf="page.heroImageUrl"
+          class="dynamic-page__hero-image"
+          [class.dynamic-page__hero-image--loading]="isHeroImageLoading"
+          [src]="page.heroImageUrl"
+          [alt]="page.title"
+          decoding="async"
+          (load)="onHeroImageLoaded()"
+          (error)="onHeroImageLoaded()"
+        />
+        <h1>{{ page.title }}</h1>
+      </header>
+
+      <section class="dynamic-page__description">
+        <p>{{ page.description }}</p>
+      </section>
+
+      <section *ngIf="safeBodyHtml" class="dynamic-page__body" [innerHTML]="safeBodyHtml"></section>
+    </article>
+  </main>
+</ng-template>
 
 <ng-template #pageNotFound>
   <main class="dynamic-page-wrapper">
