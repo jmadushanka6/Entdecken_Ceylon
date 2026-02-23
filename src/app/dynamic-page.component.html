@@ -1,0 +1,14 @@
+<article class="dynamic-page" [ngClass]="wrapperClass" [ngStyle]="cssVariables">
+  <style *ngIf="safeScopedCss" [textContent]="safeScopedCss"></style>
+
+  <header class="dynamic-page__hero">
+    <img class="dynamic-page__hero-image" [src]="page.heroImage" [alt]="page.heroAlt" decoding="async" />
+    <h1>{{ page.title }}</h1>
+  </header>
+
+  <section class="dynamic-page__description">
+    <p>{{ page.description }}</p>
+  </section>
+
+  <section *ngIf="safeBodyHtml" class="dynamic-page__body" [innerHTML]="safeBodyHtml"></section>
+</article>
