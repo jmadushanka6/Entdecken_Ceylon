@@ -1,62 +1,103 @@
 <section class="admin-page">
   <h1>Create Content Page</h1>
 
-  <form [formGroup]="pageForm" (ngSubmit)="submit()" novalidate>
-    <label>
-      URI
-      <input type="text" formControlName="uri" placeholder="best-sri-lanka-route" />
-    </label>
-    <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['required']">
-      URI is required.
-    </p>
-    <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['pattern']">
-      URI must be lowercase kebab-case (letters, numbers, and dashes only).
-    </p>
-    <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['uriTaken']">
-      This URI is already in use.
-    </p>
+  <ng-container *ngIf="!isAuthenticated; else adminPanel">
+    <section class="login-card">
+      <h2>Admin Login</h2>
 
-    <label>
-      Title
-      <input type="text" formControlName="title" />
-    </label>
-    <p class="error" *ngIf="pageForm.controls.title.touched && pageForm.controls.title.errors?.['required']">
-      Title is required.
-    </p>
+      <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+        <label>
+          Username
+          <input type="text" formControlName="username" autocomplete="username" />
+        </label>
+        <p
+          class="error"
+          *ngIf="loginForm.controls.username.touched && loginForm.controls.username.errors?.['required']"
+        >
+          Username is required.
+        </p>
 
-    <label>
-      Description
-      <textarea rows="3" formControlName="description"></textarea>
-    </label>
-    <p class="error" *ngIf="pageForm.controls.description.touched && pageForm.controls.description.errors?.['required']">
-      Description is required.
-    </p>
+        <label>
+          Password
+          <input type="password" formControlName="password" autocomplete="current-password" />
+        </label>
+        <p
+          class="error"
+          *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.['required']"
+        >
+          Password is required.
+        </p>
 
-    <label>
-      Hero Image URL
-      <input type="url" formControlName="heroImageUrl" placeholder="https://..." />
-    </label>
+        <button type="submit">Login</button>
+      </form>
 
-    <label>
-      Custom CSS
-      <textarea rows="6" formControlName="customCss" placeholder=".hero { color: #333; }"></textarea>
-    </label>
+      <p class="error" *ngIf="loginErrorMessage">{{ loginErrorMessage }}</p>
+    </section>
+  </ng-container>
 
-    <label>
-      Body HTML (optional)
-      <textarea rows="8" formControlName="bodyHtml" placeholder="<h2>Welcome</h2><p>...</p>"></textarea>
-    </label>
+  <ng-template #adminPanel>
+    <div class="admin-header">
+      <p class="login-state">Logged in as admin</p>
+      <button type="button" class="secondary" (click)="logout()">Logout</button>
+    </div>
 
-    <button type="submit" [disabled]="isSubmitting">
-      {{ isSubmitting ? 'Saving...' : 'Save page' }}
-    </button>
-  </form>
+    <form [formGroup]="pageForm" (ngSubmit)="submit()" novalidate>
+      <label>
+        URI
+        <input type="text" formControlName="uri" placeholder="best-sri-lanka-route" />
+      </label>
+      <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['required']">
+        URI is required.
+      </p>
+      <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['pattern']">
+        URI must be lowercase kebab-case (letters, numbers, and dashes only).
+      </p>
+      <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['uriTaken']">
+        This URI is already in use.
+      </p>
 
-  <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
-  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <label>
+        Title
+        <input type="text" formControlName="title" />
+      </label>
+      <p class="error" *ngIf="pageForm.controls.title.touched && pageForm.controls.title.errors?.['required']">
+        Title is required.
+      </p>
 
-  <section class="preview">
-    <h2>Preview Payload</h2>
-    <pre>{{ previewPayload | json }}</pre>
-  </section>
+      <label>
+        Description
+        <textarea rows="3" formControlName="description"></textarea>
+      </label>
+      <p class="error" *ngIf="pageForm.controls.description.touched && pageForm.controls.description.errors?.['required']">
+        Description is required.
+      </p>
+
+      <label>
+        Hero Image URL
+        <input type="url" formControlName="heroImageUrl" placeholder="https://..." />
+      </label>
+
+      <label>
+        Custom CSS
+        <textarea rows="6" formControlName="customCss" placeholder=".hero { color: #333; }"></textarea>
+      </label>
+
+      <label>
+        Body HTML (optional)
+        <textarea rows="8" formControlName="bodyHtml" placeholder="<h2>Welcome</h2><p>...</p>"></textarea>
+      </label>
+
+      <button type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Saving...' : 'Save page' }}
+      </button>
+    </form>
+
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <section class="preview">
+      <h2>Preview Payload</h2>
+      <pre>{{ previewPayload | json }}</pre>
+    </section>
+  </ng-template>
 </section>
