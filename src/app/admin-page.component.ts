@@ -24,10 +24,19 @@ interface AdminPageDraft {
 })
 export class AdminPageComponent implements OnInit, OnDestroy {
   private static readonly DRAFT_STORAGE_KEY = 'admin-page-draft';
+  private static readonly AUTH_STORAGE_KEY = 'admin-page-authenticated';
+  private static readonly ADMIN_USERNAME = 'admin';
+  private static readonly ADMIN_PASSWORD = 'admin';
 
   isSubmitting = false;
   successMessage = '';
   errorMessage = '';
+  loginErrorMessage = '';
+
+  readonly loginForm = this.formBuilder.nonNullable.group({
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required]]
+  });
 
   readonly pageForm = this.formBuilder.nonNullable.group({
     uri: [
@@ -53,14 +62,22 @@ export class AdminPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.restoreDraft();
-    this.draftSubscription = this.pageForm.valueChanges.subscribe(() => {
-      this.persistDraft();
-    });
+    if (this.isAuthenticated) {
+      this.restoreDraft();
+      this.startDraftPersistence();
+    }
   }
 
   ngOnDestroy(): void {
     this.draftSubscription?.unsubscribe();
+  }
+
+  get isAuthenticated(): boolean {
+    if (typeof localStorage === 'undefined') {
+      return false;
+    }
+
+    return localStorage.getItem(AdminPageComponent.AUTH_STORAGE_KEY) === 'true';
   }
 
   get previewPayload(): ContentPage {
@@ -70,6 +87,45 @@ export class AdminPageComponent implements OnInit, OnDestroy {
       ...formValue,
       bodyHtml: formValue.bodyHtml?.trim() || undefined
     };
+  }
+
+  login(): void {
+    this.loginErrorMessage = '';
+
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const { username, password } = this.loginForm.getRawValue();
+
+    if (
+      username === AdminPageComponent.ADMIN_USERNAME &&
+      password === AdminPageComponent.ADMIN_PASSWORD
+    ) {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(AdminPageComponent.AUTH_STORAGE_KEY, 'true');
+      }
+
+      this.loginForm.reset();
+      this.restoreDraft();
+      this.startDraftPersistence();
+      return;
+    }
+
+    this.loginErrorMessage = 'Invalid username or password.';
+  }
+
+  logout(): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(AdminPageComponent.AUTH_STORAGE_KEY);
+    }
+
+    this.draftSubscription?.unsubscribe();
+    this.draftSubscription = undefined;
+    this.loginErrorMessage = '';
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
   submit(): void {
@@ -95,6 +151,13 @@ export class AdminPageComponent implements OnInit, OnDestroy {
         this.pageForm.controls.uri.updateValueAndValidity();
         this.isSubmitting = false;
       }
+    });
+  }
+
+  private startDraftPersistence(): void {
+    this.draftSubscription?.unsubscribe();
+    this.draftSubscription = this.pageForm.valueChanges.subscribe(() => {
+      this.persistDraft();
     });
   }
 

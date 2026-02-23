@@ -33,6 +33,10 @@ button {
   cursor: pointer;
 }
 
+button.secondary {
+  background: #334155;
+}
+
 button[disabled] {
   opacity: 0.6;
   cursor: progress;
@@ -58,4 +62,24 @@ pre {
   padding: 1rem;
   border-radius: 0.5rem;
   overflow: auto;
+}
+
+.login-card {
+  max-width: 420px;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.login-state {
+  margin: 0;
+  font-weight: 600;
 }
