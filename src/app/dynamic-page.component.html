@@ -1,0 +1,12 @@
+<section class="dynamic-page" *ngIf="page; else notFound">
+  <h1>{{ page.title }}</h1>
+  <p>{{ page.body }}</p>
+</section>
+
+<ng-template #notFound>
+  <section class="dynamic-page dynamic-page--not-found">
+    <h1>Seite nicht gefunden</h1>
+    <p>Für den Slug "{{ slug }}" wurde keine Seite gefunden.</p>
+    <a routerLink="/">Zur Startseite</a>
+  </section>
+</ng-template>
