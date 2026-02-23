@@ -1,30 +1,51 @@
 <div class="home-page">
+  <button
+    class="theme-toggle"
+    type="button"
+    (click)="toggleTheme()"
+    [attr.aria-pressed]="isDarkTheme"
+    [attr.aria-label]="isDarkTheme ? 'Helles Theme aktivieren' : 'Dunkles Theme aktivieren'"
+  >
+    {{ isDarkTheme ? '☀️ Helles Theme' : '🌙 Dunkles Theme' }}
+  </button>
+
   <section class="hero" aria-label="Einführung">
-    <img
-      class="hero__image"
-      src="/assets/images/hero-sri-lanka.svg"
-      sizes="100vw"
-      alt="Morgenstimmung über den Bergen Sri Lankas"
-      fetchpriority="high"
-      decoding="async"
-    />
+    <div class="hero__slider">
+      <img
+        *ngFor="let slide of heroSlides; let i = index"
+        class="hero__image"
+        [class.hero__image--active]="i === currentSlideIndex"
+        [src]="slide.src"
+        sizes="100vw"
+        [alt]="slide.alt"
+        [attr.fetchpriority]="i === 0 ? 'high' : null"
+        decoding="async"
+      />
+    </div>
     <div class="hero__overlay"></div>
     <div class="hero__content container">
-      <button
-        class="theme-toggle"
-        type="button"
-        (click)="toggleTheme()"
-        [attr.aria-pressed]="isDarkTheme"
-        [attr.aria-label]="isDarkTheme ? 'Helles Theme aktivieren' : 'Dunkles Theme aktivieren'"
-      >
-        {{ isDarkTheme ? '☀️ Helles Theme' : '🌙 Dunkles Theme' }}
-      </button>
       <h1>Sri Lanka entdecken – entspannt & gut vorbereitet reisen</h1>
       <p>Inspiration, Routen und praktische Tipps für Ihre Reiseplanung.</p>
       <div class="hero__actions">
         <a class="btn btn--primary" href="/reise-planen">Reise planen</a>
         <a class="btn btn--secondary" href="/routen">Routen ansehen</a>
       </div>
+    </div>
+
+    <div class="hero__controls" aria-label="Bild-Slider Steuerung">
+      <button class="hero__control" type="button" (click)="previousSlide()" aria-label="Vorheriges Bild">‹</button>
+      <div class="hero__dots">
+        <button
+          *ngFor="let slide of heroSlides; let i = index"
+          type="button"
+          class="hero__dot"
+          [class.hero__dot--active]="i === currentSlideIndex"
+          [attr.aria-label]="'Bild ' + (i + 1)"
+          [attr.aria-pressed]="i === currentSlideIndex"
+          (click)="goToSlide(i)"
+        ></button>
+      </div>
+      <button class="hero__control" type="button" (click)="nextSlide()" aria-label="Nächstes Bild">›</button>
     </div>
   </section>
 
