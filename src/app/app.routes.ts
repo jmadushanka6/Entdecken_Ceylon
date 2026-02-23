@@ -7,8 +7,9 @@ import { AdminPageComponent } from './admin-page.component';
 export const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'datenschutz', component: PrivacyPolicyComponent },
+    { path: 'admin', component: AdminPageComponent },
   { path: ':slug', component: DynamicPageComponent },
   { path: ':category/:slug', component: DynamicPageComponent },
-  { path: 'admin', component: AdminPageComponent },
+
   { path: '**', redirectTo: '' }
 ];
