@@ -1,0 +1,117 @@
+<div class="home-page">
+  <section class="hero" aria-label="Einführung">
+    <div class="hero__slider">
+      <img
+        *ngFor="let slide of heroSlides; let i = index"
+        class="hero__image"
+        [class.hero__image--active]="i === currentSlideIndex"
+        [src]="slide.src"
+        sizes="100vw"
+        [alt]="slide.alt"
+        [attr.fetchpriority]="i === 0 ? 'high' : null"
+        decoding="async"
+      />
+    </div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content container">
+      <h1>Sri Lanka entdecken – entspannt & gut vorbereitet reisen</h1>
+      <p>Inspiration, Routen und praktische Tipps für Ihre Reiseplanung.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="/reise-planen">Reise planen</a>
+        <a class="btn btn--secondary" href="/routen">Routen ansehen</a>
+      </div>
+    </div>
+
+    <div class="hero__controls" aria-label="Bild-Slider Steuerung">
+      <button class="hero__control" type="button" (click)="previousSlide()" aria-label="Vorheriges Bild">‹</button>
+      <div class="hero__dots">
+        <button
+          *ngFor="let slide of heroSlides; let i = index"
+          type="button"
+          class="hero__dot"
+          [class.hero__dot--active]="i === currentSlideIndex"
+          [attr.aria-label]="'Bild ' + (i + 1)"
+          [attr.aria-pressed]="i === currentSlideIndex"
+          (click)="goToSlide(i)"
+        ></button>
+      </div>
+      <button class="hero__control" type="button" (click)="nextSlide()" aria-label="Nächstes Bild">›</button>
+    </div>
+  </section>
+
+  <section class="section container" aria-label="Stimmungen">
+    <div class="mood-grid">
+      <a class="mood-tile" href="/orte/hochland">
+        <img src="/assets/images/highlands.svg" alt="Nebeliger Teeberg im Hochland" loading="lazy" decoding="async" />
+        <span>Natur & Hochland</span>
+      </a>
+      <a class="mood-tile" href="/orte/westen-sueden">
+        <img src="/assets/images/beach.svg" alt="Sandstrand und Palmen an der Südküste" loading="lazy" decoding="async" />
+        <span>Strände & Süden</span>
+      </a>
+      <a class="mood-tile" href="/orte/kultur-dreieck">
+        <img src="/assets/images/culture.svg" alt="Historischer Tempel im Kulturdreieck" loading="lazy" decoding="async" />
+        <span>Kultur & Geschichte</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section section--soft container" aria-label="Reiseplanung">
+    <h2>Ihre Reise Schritt für Schritt planen</h2>
+    <div class="steps-grid">
+      <a class="step-card" *ngFor="let step of planningSteps" [href]="step.href">
+        <span class="step-card__icon" aria-hidden="true">{{ step.icon }}</span>
+        <span>{{ step.label }}</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section container featured-route" aria-label="Empfohlene Route">
+    <img src="/assets/images/route.svg" alt="Küstenstraße in Sri Lanka" loading="lazy" decoding="async" />
+    <div>
+      <h2>Unsere empfohlene 14-Tage-Route</h2>
+      <p>Von Kulturstätten bis zur Südküste – eine ausgewogene Reise durch Sri Lanka.</p>
+      <a class="link-cta" href="/routen/14-tage">Route im Detail ansehen</a>
+    </div>
+  </section>
+
+  <section class="section section--narrow container" aria-label="Warum dieser Guide">
+    <h2>Warum dieser Guide?</h2>
+    <p>
+      Sri Lanka ist vielfältig, intensiv und manchmal überwältigend. Dieser Guide hilft Ihnen, Klarheit zu gewinnen – ohne Verkaufsdruck,
+      ohne Hektik.
+    </p>
+  </section>
+
+  <section class="section container" aria-label="Beliebte Guides">
+    <h2>Beliebte Guides</h2>
+    <div class="guides-grid">
+      <a class="guide-card" *ngFor="let guide of guideCards" [href]="guide.href">
+        <img [src]="guide.image" [alt]="guide.title" loading="lazy" decoding="async" />
+        <small>{{ guide.label }}</small>
+        <span>{{ guide.title }}</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section section--narrow container" aria-label="Häufige Fragen">
+    <h2>Häufige Fragen zur Sri-Lanka-Reise</h2>
+    <details>
+      <summary>Wann ist die beste Reisezeit für Sri Lanka?</summary>
+      <p>Der Südwesten ist oft von Dezember bis April ideal, der Osten von Mai bis September.</p>
+    </details>
+    <details>
+      <summary>Wie viel Budget braucht man für 2 Wochen?</summary>
+      <p>Je nach Stil planen viele Reisende zwischen 1.200 und 2.500 Euro pro Person.</p>
+    </details>
+  </section>
+
+  <section class="section section--narrow container" aria-label="Zuletzt aktualisiert">
+    <h2>Zuletzt aktualisiert</h2>
+    <div class="updates-list">
+      <p><span>März 2026</span> Visum-Info aktualisiert</p>
+      <p><span>Februar 2026</span> Beste Reisezeit Hinweise aktualisiert</p>
+      <p><span>Januar 2026</span> Kostenübersicht geprüft</p>
+    </div>
+  </section>
+</div>

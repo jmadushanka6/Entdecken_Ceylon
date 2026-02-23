@@ -1,116 +1,26 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { Meta, Title } from '@angular/platform-browser';
+import { Component, Inject, OnInit } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+
+type CookieConsentChoice = 'essential' | 'all';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   isDarkTheme = false;
-  currentSlideIndex = 0;
-  private sliderTimer?: ReturnType<typeof setInterval>;
+  showCookieBanner = false;
+  consentChoice: CookieConsentChoice | null = null;
 
-  readonly heroSlides = [
-    {
-      src: '/assets/images/hero-sri-lanka.svg',
-      alt: 'Morgenstimmung über den Bergen Sri Lankas'
-    },
-    {
-      src: '/assets/images/beach.svg',
-      alt: 'Palmen und Strand an der Südküste von Sri Lanka'
-    },
-    {
-      src: '/assets/images/highlands.svg',
-      alt: 'Teeplantagen und Hügel im Hochland von Sri Lanka'
-    }
-  ];
-
-  readonly planningSteps = [
-    { label: 'Beste Reisezeit', href: '/reise-planen/beste-reisezeit', icon: '☀️' },
-    { label: 'Budget & Kosten', href: '/kosten/2-wochen-budget', icon: '💶' },
-    { label: 'Sicherheit', href: '/sicherheit/ist-sri-lanka-sicher', icon: '🛡️' },
-    { label: 'Transport', href: '/reise-planen/transport', icon: '🚆' },
-    { label: 'Beispielrouten', href: '/routen', icon: '🗺️' }
-  ];
-
-  readonly guideCards = [
-    {
-      title: 'Beste Reisezeit für Sri Lanka',
-      href: '/reise-planen/beste-reisezeit',
-      label: 'Reiseplanung',
-      image: '/assets/images/guide-best-time.svg'
-    },
-    {
-      title: 'Sri Lanka Kosten für 2 Wochen',
-      href: '/kosten/2-wochen-budget',
-      label: 'Kosten',
-      image: '/assets/images/guide-cost.svg'
-    },
-    {
-      title: 'Ist Sri Lanka sicher?',
-      href: '/sicherheit/ist-sri-lanka-sicher',
-      label: 'Sicherheit',
-      image: '/assets/images/guide-safety.svg'
-    },
-    {
-      title: '10 Tage Route',
-      href: '/routen/10-tage',
-      label: 'Route',
-      image: '/assets/images/guide-route-10.svg'
-    },
-    {
-      title: 'Visum DE/AT/CH',
-      href: '/reise-planen/visum-de-at-ch',
-      label: 'Einreise',
-      image: '/assets/images/guide-visa.svg'
-    },
-    {
-      title: '14 Tage Route im Überblick',
-      href: '/routen/14-tage',
-      label: 'Empfehlung',
-      image: '/assets/images/guide-route-14.svg'
-    }
-  ];
-
-  constructor(
-    private readonly title: Title,
-    private readonly meta: Meta,
-    private readonly renderer: Renderer2,
-    @Inject(DOCUMENT) private readonly document: Document
-  ) {}
+  constructor(@Inject(DOCUMENT) private readonly document: Document) {}
 
   ngOnInit(): void {
     this.initializeTheme();
-    this.startSlider();
-
-    const pageTitle = 'Sri Lanka entdecken – entspannt & gut vorbereitet reisen';
-    const description =
-      'Inspiration, Routen und praktische Tipps für Ihre Reiseplanung in Sri Lanka – ruhig, strukturiert und ohne Verkaufsdruck.';
-    const pageUrl = 'https://entdecken-ceylon.de/';
-    const socialImage = `${pageUrl}assets/images/hero-sri-lanka.svg`;
-
-    this.title.setTitle(pageTitle);
-    this.meta.updateTag({ name: 'description', content: description });
-    this.meta.updateTag({ name: 'robots', content: 'index, follow, max-image-preview:large' });
-    this.meta.updateTag({ property: 'og:title', content: pageTitle });
-    this.meta.updateTag({ property: 'og:description', content: description });
-    this.meta.updateTag({ property: 'og:type', content: 'website' });
-    this.meta.updateTag({ property: 'og:url', content: pageUrl });
-    this.meta.updateTag({ property: 'og:image', content: socialImage });
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-    this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
-    this.meta.updateTag({ name: 'twitter:description', content: description });
-    this.meta.updateTag({ name: 'twitter:image', content: socialImage });
-
-    this.injectJsonLd(pageTitle, description, pageUrl);
-  }
-
-  ngOnDestroy(): void {
-    this.stopSlider();
+    this.initializeCookieConsent();
   }
 
   toggleTheme(): void {
@@ -118,38 +28,16 @@ export class AppComponent implements OnInit, OnDestroy {
     localStorage.setItem('entdecken-theme', this.isDarkTheme ? 'dark' : 'light');
   }
 
-  previousSlide(): void {
-    this.currentSlideIndex =
-      (this.currentSlideIndex - 1 + this.heroSlides.length) % this.heroSlides.length;
-    this.restartSlider();
+  acceptEssentialCookies(): void {
+    this.storeConsent('essential');
   }
 
-  nextSlide(): void {
-    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
-    this.restartSlider();
+  acceptAllCookies(): void {
+    this.storeConsent('all');
   }
 
-  goToSlide(index: number): void {
-    this.currentSlideIndex = index;
-    this.restartSlider();
-  }
-
-  private startSlider(): void {
-    this.sliderTimer = setInterval(() => {
-      this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
-    }, 5000);
-  }
-
-  private stopSlider(): void {
-    if (this.sliderTimer) {
-      clearInterval(this.sliderTimer);
-      this.sliderTimer = undefined;
-    }
-  }
-
-  private restartSlider(): void {
-    this.stopSlider();
-    this.startSlider();
+  openCookieSettings(): void {
+    this.showCookieBanner = true;
   }
 
   private initializeTheme(): void {
@@ -164,54 +52,23 @@ export class AppComponent implements OnInit, OnDestroy {
     this.document.body.classList.toggle('theme-dark', this.isDarkTheme);
   }
 
-  private injectJsonLd(pageTitle: string, description: string, pageUrl: string): void {
-    const structuredData = {
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'WebSite',
-          '@id': `${pageUrl}#website`,
-          url: pageUrl,
-          name: pageTitle,
-          inLanguage: 'de',
-          description
-        },
-        {
-          '@type': 'TravelGuide',
-          '@id': `${pageUrl}#travel-guide`,
-          name: 'Entdecken Ceylon Reiseguide',
-          about: 'Sri Lanka Reiseplanung',
-          inLanguage: 'de',
-          url: pageUrl,
-          description
-        },
-        {
-          '@type': 'FAQPage',
-          mainEntity: [
-            {
-              '@type': 'Question',
-              name: 'Wann ist die beste Reisezeit für Sri Lanka?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Die optimale Reisezeit hängt von der Region ab. Der Südwesten ist meist von Dezember bis April ideal, der Osten von Mai bis September.'
-              }
-            },
-            {
-              '@type': 'Question',
-              name: 'Wie viel Budget braucht man für 2 Wochen Sri Lanka?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Je nach Reisestil liegen viele Reisen zwischen 1.200 und 2.500 Euro pro Person inklusive Unterkünften, Transport und Aktivitäten.'
-              }
-            }
-          ]
-        }
-      ]
-    };
+  private initializeCookieConsent(): void {
+    const storedValue = localStorage.getItem('entdecken-cookie-consent');
 
-    const script = this.renderer.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(structuredData);
-    this.renderer.appendChild(this.document.head, script);
+    if (!storedValue) {
+      this.showCookieBanner = true;
+      return;
+    }
+
+    this.consentChoice = storedValue === 'all' ? 'all' : 'essential';
+    this.showCookieBanner = false;
+  }
+
+  private storeConsent(choice: CookieConsentChoice): void {
+    this.consentChoice = choice;
+    this.showCookieBanner = false;
+
+    localStorage.setItem('entdecken-cookie-consent', choice);
+    localStorage.setItem('entdecken-cookie-consent-date', new Date().toISOString());
   }
 }

@@ -1,0 +1,87 @@
+<main class="privacy-page">
+  <section class="section container privacy-header">
+    <p class="kicker">EU-Transparenz (DSGVO & ePrivacy)</p>
+    <h1>Datenschutzerklärung & Cookie-Hinweise</h1>
+    <p>
+      Diese Seite erklärt, welche personenbezogenen Daten verarbeitet werden, welche Rechtsgrundlagen gelten und wie Sie Ihre Rechte nach
+      Art. 12–23 DSGVO ausüben können.
+    </p>
+    <p *ngIf="consentDate" class="consent-info">Ihre letzte Cookie-Auswahl wurde gespeichert am: {{ consentDate | date:'dd.MM.yyyy, HH:mm' }} Uhr.</p>
+    <a routerLink="/" class="back-link">← Zurück zur Startseite</a>
+  </section>
+
+  <section class="section section--soft container policy-grid">
+    <article>
+      <h2>1. Verantwortliche Stelle</h2>
+      <p>Entdecken Ceylon Reiseguide<br />Musterstraße 12, 10115 Berlin, Deutschland<br />E-Mail: datenschutz&#64;entdecken-ceylon.de</p>
+    </article>
+
+    <article>
+      <h2>2. Zwecke & Rechtsgrundlagen</h2>
+      <ul>
+        <li><strong>Bereitstellung der Website:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an stabiler Auslieferung).</li>
+        <li><strong>Cookie-Einwilligung:</strong> Art. 6 Abs. 1 lit. a DSGVO i.V.m. § 25 TTDSG.</li>
+        <li><strong>Kontaktanfragen:</strong> Art. 6 Abs. 1 lit. b oder lit. f DSGVO.</li>
+      </ul>
+    </article>
+
+    <article>
+      <h2>3. Cookie-Kategorien</h2>
+      <ul>
+        <li><strong>Notwendige Cookies:</strong> Theme-Auswahl und Cookie-Präferenzen, damit die Seite korrekt funktioniert.</li>
+        <li><strong>Analyse-Cookies (optional):</strong> Nur nach aktiver Zustimmung zur Reichweitenmessung.</li>
+      </ul>
+      <p>Sie können Ihre Entscheidung jederzeit über den Link „Cookie-Einstellungen“ im Footer ändern.</p>
+    </article>
+
+    <article>
+      <h2>4. Speicherdauer</h2>
+      <p>
+        Wir speichern Daten nur so lange, wie sie für den jeweiligen Zweck erforderlich sind oder gesetzliche Aufbewahrungspflichten gelten.
+        Cookie-Präferenzen werden lokal im Browser gespeichert.
+      </p>
+    </article>
+
+    <article>
+      <h2>5. Empfänger & Drittlandtransfers</h2>
+      <p>
+        Es werden nur Dienstleister eingesetzt, die vertraglich gebunden sind (Art. 28 DSGVO). Falls Daten außerhalb der EU/EWR übertragen
+        werden, erfolgen geeignete Garantien (z. B. EU-Standardvertragsklauseln).
+      </p>
+    </article>
+
+    <article>
+      <h2>6. Ihre Rechte</h2>
+      <ul>
+        <li>Auskunft (Art. 15 DSGVO)</li>
+        <li>Berichtigung (Art. 16 DSGVO)</li>
+        <li>Löschung (Art. 17 DSGVO)</li>
+        <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+        <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
+        <li>Widerspruch (Art. 21 DSGVO)</li>
+        <li>Widerruf erteilter Einwilligungen mit Wirkung für die Zukunft</li>
+      </ul>
+    </article>
+
+    <article>
+      <h2>7. Beschwerderecht</h2>
+      <p>
+        Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde in der EU zu beschweren, insbesondere in Ihrem Aufenthalts- oder
+        Arbeitsstaat.
+      </p>
+    </article>
+
+    <article>
+      <h2>8. Minderjährigenschutz</h2>
+      <p>
+        Dieses Angebot richtet sich nicht gezielt an Kinder unter 16 Jahren. Sollten entsprechende Daten dennoch verarbeitet werden, erfolgt
+        dies ausschließlich im Rahmen der gesetzlichen Vorgaben.
+      </p>
+    </article>
+
+    <article>
+      <h2>9. Aktualisierung dieser Hinweise</h2>
+      <p>Wir prüfen diese Erklärung regelmäßig und passen sie bei rechtlichen oder technischen Änderungen an.</p>
+    </article>
+  </section>
+</main>
