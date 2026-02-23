@@ -1,75 +1,21 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-
-interface DynamicPageData {
-  title: string;
-  description: string;
-  seoTitle?: string;
-  seoDescription?: string;
-}
+import { ContentPage, ContentService } from './content.service';
 
 @Component({
   selector: 'app-dynamic-page',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  template: `
-    <main class="dynamic-page">
-      <div class="container">
-        <p class="dynamic-page__label">Inhalt in Vorbereitung</p>
-        <h1>{{ pageData?.title ?? fallbackMetadata.title }}</h1>
-        <p>{{ pageData?.description ?? fallbackMetadata.description }}</p>
-        <a routerLink="/">Zurück zur Startseite</a>
-      </div>
-    </main>
-  `,
-  styles: [
-    `
-      .dynamic-page {
-        padding: 3rem 0;
-      }
-
-      .container {
-        width: min(900px, 92vw);
-        margin: 0 auto;
-      }
-
-      .dynamic-page__label {
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-    `
-  ]
+  templateUrl: './dynamic-page.component.html',
+  styleUrl: './dynamic-page.component.scss'
 })
 export class DynamicPageComponent implements OnInit, OnDestroy {
-  pageData: DynamicPageData | null = null;
-
-  readonly fallbackMetadata: DynamicPageData = {
-    title: 'Entdecken Ceylon',
-    description: 'Reiseinhalte werden geladen. Bitte schauen Sie in Kürze wieder vorbei.',
-    seoTitle: 'Entdecken Ceylon | Sri Lanka Reisetipps',
-    seoDescription: 'Praktische Sri Lanka Reisetipps, Inspiration und aktuelle Hinweise für Ihre Reiseplanung.'
-  };
-
-  private readonly pageDataBySlug: Record<string, DynamicPageData> = {
-    'beste-reisezeit': {
-      title: 'Beste Reisezeit für Sri Lanka',
-      description: 'Wann sich welche Region besonders lohnt und worauf Sie bei Monsunzeiten achten sollten.',
-      seoTitle: 'Beste Reisezeit Sri Lanka | Entdecken Ceylon',
-      seoDescription: 'Monatsübersicht für Wetter, Regenzeiten und optimale Reiseplanung für Sri Lanka.'
-    },
-    '2-wochen-budget': {
-      title: 'Sri Lanka Kosten für 2 Wochen',
-      description: 'Budgetbeispiele für Unterkünfte, Transport und Aktivitäten im Überblick.'
-    },
-    'ist-sri-lanka-sicher': {
-      title: 'Ist Sri Lanka sicher?',
-      description: 'Sicherheitslage, Gesundheitstipps und Verhaltensempfehlungen für unterwegs.'
-    }
-  };
+  page: ContentPage | null = null;
+  safeBodyHtml: SafeHtml | null = null;
 
   private routeSubscription?: Subscription;
 
@@ -78,14 +24,20 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly title: Title,
     private readonly meta: Meta,
+    private readonly sanitizer: DomSanitizer,
+    private readonly contentService: ContentService,
     @Inject(DOCUMENT) private readonly document: Document
   ) {}
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((paramMap) => {
       const slug = paramMap.get('slug') ?? '';
-      this.pageData = this.pageDataBySlug[slug] ?? null;
-      this.updateMetadata(this.pageData);
+      this.page = this.contentService.getPageByUri(slug) ?? null;
+      this.safeBodyHtml = this.page?.bodyHtml
+        ? this.sanitizer.bypassSecurityTrustHtml(this.page.bodyHtml)
+        : null;
+
+      this.updateMetadata();
     });
   }
 
@@ -93,13 +45,18 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
     this.routeSubscription?.unsubscribe();
   }
 
-  private updateMetadata(pageData: DynamicPageData | null): void {
-    const metadata = pageData ?? this.fallbackMetadata;
+  get currentCustomCss(): string {
+    return this.page?.customCss ?? '';
+  }
 
-    this.title.setTitle(metadata.seoTitle || metadata.title);
+  private updateMetadata(): void {
+    const titleText = this.page?.title ?? 'Seite nicht gefunden | Entdecken Ceylon';
+    const description = this.page?.description ?? 'Diese Seite wurde nicht gefunden.';
+
+    this.title.setTitle(titleText);
     this.meta.updateTag({
       name: 'description',
-      content: metadata.seoDescription || metadata.description
+      content: description
     });
 
     this.updateCanonicalUrl();
