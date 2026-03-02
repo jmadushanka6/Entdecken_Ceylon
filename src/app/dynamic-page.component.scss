@@ -18,10 +18,45 @@
   color: var(--page-text);
 }
 
+.loader-card,
+.image-loader {
+  display: grid;
+  place-items: center;
+  gap: 0.75rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.loader-card {
+  min-height: 14rem;
+  border-radius: 0.8rem;
+  background: var(--surface-card);
+}
+
+.loader-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid color-mix(in srgb, var(--link) 20%, transparent);
+  border-top-color: var(--link);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
 .dynamic-page__hero {
   margin: 0;
   display: grid;
   gap: 1rem;
+}
+
+.dynamic-page__image-wrapper {
+  position: relative;
+}
+
+.image-loader {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--surface-card) 75%, transparent);
 }
 
 .dynamic-page__hero-image {
@@ -29,6 +64,10 @@
   min-height: clamp(14rem, 42vw, 24rem);
   object-fit: cover;
   border-radius: 0.85rem;
+}
+
+.dynamic-page__hero-image--hidden {
+  visibility: hidden;
 }
 
 h1 {
@@ -64,5 +103,11 @@ h1 {
 
   :where(a) {
     color: var(--page-accent);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
