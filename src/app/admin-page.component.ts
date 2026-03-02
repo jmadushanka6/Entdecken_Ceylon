@@ -185,6 +185,14 @@ export class AdminPageComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (typeof window !== 'undefined') {
+      const shouldDelete = window.confirm(`Are you sure you want to delete /${uri}?`);
+
+      if (!shouldDelete) {
+        return;
+      }
+    }
+
     this.successMessage = '';
     this.errorMessage = '';
     this.isDeleting = true;
