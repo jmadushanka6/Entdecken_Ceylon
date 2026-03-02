@@ -24,15 +24,15 @@ export class ContentService {
   private readonly pages: ContentPage[] = this.loadPages();
 
   getPages(): ContentPage[] {
-    return [...this.pages];
+    return [...this.pages].sort((a, b) => a.uri.localeCompare(b.uri));
   }
 
   getPageByUri(uri: string): ContentPage | undefined {
     return this.pages.find((page) => page.uri === uri);
   }
 
-  isUriTaken(uri: string): boolean {
-    return this.pages.some((page) => page.uri === uri);
+  isUriTaken(uri: string, excludeUri?: string): boolean {
+    return this.pages.some((page) => page.uri === uri && page.uri !== excludeUri);
   }
 
   createPage(page: ContentPage): Observable<ContentPage> {
@@ -43,6 +43,43 @@ export class ContentService {
     this.pages.push(page);
     this.persistPages();
     return of(page).pipe(delay(250));
+  }
+
+  updatePage(originalUri: string, page: ContentPage): Observable<ContentPage> {
+    const pageIndex = this.pages.findIndex((existingPage) => existingPage.uri === originalUri);
+
+    if (pageIndex < 0) {
+      return throwError(() => new Error('Page not found.'));
+    }
+
+    if (this.isUriTaken(page.uri, originalUri)) {
+      return throwError(() => new Error('URI already exists. Please choose another slug.'));
+    }
+
+    this.pages[pageIndex] = page;
+    this.persistPages();
+    return of(page).pipe(delay(250));
+  }
+
+  hasDescendantPages(uri: string): boolean {
+    const normalized = `${uri}/`;
+    return this.pages.some((page) => page.uri.startsWith(normalized));
+  }
+
+  deletePage(uri: string): Observable<void> {
+    if (this.hasDescendantPages(uri)) {
+      return throwError(() => new Error('Cannot delete this URI because it has child routes.'));
+    }
+
+    const pageIndex = this.pages.findIndex((page) => page.uri === uri);
+
+    if (pageIndex < 0) {
+      return throwError(() => new Error('Page not found.'));
+    }
+
+    this.pages.splice(pageIndex, 1);
+    this.persistPages();
+    return of(void 0).pipe(delay(250));
   }
 
   private loadPages(): ContentPage[] {

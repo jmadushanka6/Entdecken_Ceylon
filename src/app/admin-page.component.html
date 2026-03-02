@@ -41,16 +41,46 @@
       <button type="button" class="secondary" (click)="logout()">Logout</button>
     </div>
 
+    <section class="templates-list">
+      <h2>Existing Templates</h2>
+
+      <p *ngIf="!templateTree.length">No templates available yet.</p>
+
+      <ul class="tree" *ngIf="templateTree.length">
+        <li *ngFor="let node of paginatedTemplateTree; trackBy: trackNode">
+          <ng-container
+            [ngTemplateOutlet]="templateNode"
+            [ngTemplateOutletContext]="{ $implicit: node }"
+          ></ng-container>
+        </li>
+      </ul>
+
+      <div class="pagination" *ngIf="templateTree.length > pageSize">
+        <button type="button" class="secondary" (click)="goToPage(currentPageIndex - 1)" [disabled]="currentPageIndex === 0">
+          Previous
+        </button>
+        <span>Page {{ currentPageIndex + 1 }} of {{ totalPages }}</span>
+        <button
+          type="button"
+          class="secondary"
+          (click)="goToPage(currentPageIndex + 1)"
+          [disabled]="currentPageIndex + 1 >= totalPages"
+        >
+          Next
+        </button>
+      </div>
+    </section>
+
     <form [formGroup]="pageForm" (ngSubmit)="submit()" novalidate>
       <label>
         URI
-        <input type="text" formControlName="uri" placeholder="best-sri-lanka-route" />
+        <input type="text" formControlName="uri" placeholder="A/B/C" />
       </label>
       <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['required']">
         URI is required.
       </p>
       <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['pattern']">
-        URI must be lowercase kebab-case (letters, numbers, and dashes only).
+        URI must use lowercase kebab-case segments and may include / (example: a/b/c).
       </p>
       <p class="error" *ngIf="pageForm.controls.uri.touched && pageForm.controls.uri.errors?.['uriTaken']">
         This URI is already in use.
@@ -87,9 +117,12 @@
         <textarea rows="8" formControlName="bodyHtml" placeholder="<h2>Welcome</h2><p>...</p>"></textarea>
       </label>
 
-      <button type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Saving...' : 'Save page' }}
-      </button>
+      <div class="form-actions">
+        <button type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Saving...' : editingUri ? 'Update page' : 'Save page' }}
+        </button>
+        <button type="button" class="secondary" *ngIf="editingUri" (click)="cancelEdit()">Cancel edit</button>
+      </div>
     </form>
 
     <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
@@ -101,3 +134,36 @@
     </section>
   </ng-template>
 </section>
+
+<ng-template #templateNode let-node>
+  <div class="tree-node">
+    <button
+      type="button"
+      class="toggle secondary"
+      *ngIf="node.children.length"
+      (click)="toggleExpanded(node.fullUri)"
+    >
+      {{ isExpanded(node.fullUri) ? '−' : '+' }}
+    </button>
+    <span class="branch" *ngIf="!node.children.length"></span>
+
+    <span class="uri">{{ node.fullUri }}</span>
+
+    <ng-container *ngIf="node.hasTemplate">
+      <button type="button" class="secondary" (click)="editTemplate(node.fullUri)">Edit</button>
+      <button type="button" class="danger" (click)="deleteTemplate(node.fullUri)" [disabled]="!canDelete(node.fullUri) || isDeleting">
+        Delete
+      </button>
+    </ng-container>
+
+    <small class="warning" *ngIf="node.hasTemplate && !canDelete(node.fullUri)">
+      Has child routes, delete children first.
+    </small>
+  </div>
+
+  <ul *ngIf="node.children.length && isExpanded(node.fullUri)">
+    <li *ngFor="let child of node.children; trackBy: trackNode">
+      <ng-container [ngTemplateOutlet]="templateNode" [ngTemplateOutletContext]="{ $implicit: child }"></ng-container>
+    </li>
+  </ul>
+</ng-template>
