@@ -30,9 +30,9 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.routeSubscription = this.route.paramMap.subscribe((paramMap) => {
-      const slug = paramMap.get('slug') ?? '';
-      this.page = this.contentService.getPageByUri(slug) ?? null;
+    this.routeSubscription = this.route.url.subscribe((segments) => {
+      const uri = segments.map((segment) => segment.path).join('/');
+      this.page = this.contentService.getPageByUri(uri) ?? null;
       this.safeBodyHtml = this.page?.bodyHtml
         ? this.sanitizer.bypassSecurityTrustHtml(this.page.bodyHtml)
         : null;
