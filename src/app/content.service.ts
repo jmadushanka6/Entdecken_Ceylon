@@ -263,11 +263,15 @@ export class ContentService {
   }
 
   private collectionUrl(): string {
-    return `https://firestore.googleapis.com/v1/projects/${firebaseClientConfig.projectId}/databases/${ContentService.FIRESTORE_DATABASE_ID}/documents/${ContentService.FIRESTORE_COLLECTION}?key=${firebaseClientConfig.apiKey}`;
+    return `${this.firestoreBaseUrl()}/${ContentService.FIRESTORE_COLLECTION}?key=${firebaseClientConfig.apiKey}`;
   }
 
   private documentUrl(uri: string): string {
-    return `${this.collectionUrl()}/${encodeURIComponent(uri)}`;
+    return `${this.firestoreBaseUrl()}/${ContentService.FIRESTORE_COLLECTION}/${encodeURIComponent(uri)}?key=${firebaseClientConfig.apiKey}`;
+  }
+
+  private firestoreBaseUrl(): string {
+    return `https://firestore.googleapis.com/v1/projects/${firebaseClientConfig.projectId}/databases/${ContentService.FIRESTORE_DATABASE_ID}/documents`;
   }
 
   private toFirestoreFields(page: ContentPage): Record<string, { stringValue: string }> {
