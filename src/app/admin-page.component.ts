@@ -69,6 +69,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
   });
 
   private draftSubscription?: Subscription;
+  private pagesSubscription?: Subscription;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -79,12 +80,17 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     if (this.isAuthenticated) {
       this.restoreDraft();
       this.startDraftPersistence();
-      this.loadTemplateTree();
+      this.pagesSubscription = this.contentService.pagesLoaded$.subscribe((isLoaded) => {
+        if (isLoaded) {
+          this.loadTemplateTree();
+        }
+      });
     }
   }
 
   ngOnDestroy(): void {
     this.draftSubscription?.unsubscribe();
+    this.pagesSubscription?.unsubscribe();
   }
 
   get isAuthenticated(): boolean {
@@ -125,7 +131,12 @@ export class AdminPageComponent implements OnInit, OnDestroy {
       this.loginForm.reset();
       this.restoreDraft();
       this.startDraftPersistence();
-      this.loadTemplateTree();
+      this.pagesSubscription?.unsubscribe();
+      this.pagesSubscription = this.contentService.pagesLoaded$.subscribe((isLoaded) => {
+        if (isLoaded) {
+          this.loadTemplateTree();
+        }
+      });
       return;
     }
 
@@ -138,7 +149,9 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     }
 
     this.draftSubscription?.unsubscribe();
+    this.pagesSubscription?.unsubscribe();
     this.draftSubscription = undefined;
+    this.pagesSubscription = undefined;
     this.loginErrorMessage = '';
     this.successMessage = '';
     this.errorMessage = '';

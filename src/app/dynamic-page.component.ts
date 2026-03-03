@@ -3,7 +3,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { ContentPage, ContentService } from './content.service';
 
 @Component({
@@ -16,6 +16,8 @@ import { ContentPage, ContentService } from './content.service';
 export class DynamicPageComponent implements OnInit, OnDestroy {
   page: ContentPage | null = null;
   safeBodyHtml: SafeHtml | null = null;
+  isPageLoading = true;
+  isHeroImageLoading = false;
 
   private routeSubscription?: Subscription;
 
@@ -30,19 +32,32 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.routeSubscription = this.route.url.subscribe((segments) => {
-      const uri = segments.map((segment) => segment.path).join('/');
-      this.page = this.contentService.getPageByUri(uri) ?? null;
-      this.safeBodyHtml = this.page?.bodyHtml
-        ? this.sanitizer.bypassSecurityTrustHtml(this.page.bodyHtml)
-        : null;
+    this.routeSubscription = combineLatest([this.route.url, this.contentService.pagesLoaded$]).subscribe(
+      ([segments, isLoaded]) => {
+        if (!isLoaded) {
+          this.isPageLoading = true;
+          return;
+        }
 
-      this.updateMetadata();
-    });
+        const uri = segments.map((segment) => segment.path).join('/');
+        this.page = this.contentService.getPageByUri(uri) ?? null;
+        this.safeBodyHtml = this.page?.bodyHtml
+          ? this.sanitizer.bypassSecurityTrustHtml(this.page.bodyHtml)
+          : null;
+
+        this.isPageLoading = false;
+        this.isHeroImageLoading = !!this.page?.heroImageUrl;
+        this.updateMetadata();
+      }
+    );
   }
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+  }
+
+  onHeroImageLoaded(): void {
+    this.isHeroImageLoading = false;
   }
 
   get currentCustomCss(): string {
