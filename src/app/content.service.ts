@@ -25,6 +25,8 @@ interface FirestoreDocument {
 })
 export class ContentService {
   private static readonly STORAGE_KEY = 'content-pages';
+  private static readonly FIRESTORE_DATABASE_ID = 'x';
+  private static readonly FIRESTORE_COLLECTION = 'y';
 
   private readonly pages: ContentPage[] = [];
   private readonly pagesLoadedSubject = new BehaviorSubject<boolean>(false);
@@ -261,7 +263,7 @@ export class ContentService {
   }
 
   private collectionUrl(): string {
-    return `https://firestore.googleapis.com/v1/projects/${firebaseClientConfig.projectId}/databases/(default)/documents/contentPages?key=${firebaseClientConfig.apiKey}`;
+    return `https://firestore.googleapis.com/v1/projects/${firebaseClientConfig.projectId}/databases/${ContentService.FIRESTORE_DATABASE_ID}/documents/${ContentService.FIRESTORE_COLLECTION}?key=${firebaseClientConfig.apiKey}`;
   }
 
   private documentUrl(uri: string): string {
