@@ -1,13 +1,14 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { ThemedDialogComponent } from './themed-dialog.component';
 
 type CookieConsentChoice = 'essential' | 'all';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, ThemedDialogComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

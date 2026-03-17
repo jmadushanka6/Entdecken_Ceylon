@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ContentPage, ContentService } from './content.service';
+import { ThemedDialogService } from './themed-dialog.service';
 
 interface AdminPageDraft {
   version: 1;
@@ -73,7 +74,8 @@ export class AdminPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly contentService: ContentService
+    private readonly contentService: ContentService,
+    private readonly themedDialogService: ThemedDialogService
   ) {}
 
   ngOnInit(): void {
@@ -193,17 +195,30 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteTemplate(uri: string): void {
-    if (this.contentService.hasDescendantPages(uri) || this.isDeleting) {
+  async deleteTemplate(uri: string): Promise<void> {
+    if (this.isDeleting) {
       return;
     }
 
-    if (typeof window !== 'undefined') {
-      const shouldDelete = window.confirm(`Are you sure you want to delete /${uri}?`);
+    if (this.contentService.hasDescendantPages(uri)) {
+      await this.themedDialogService.alert({
+        title: 'Cannot delete route',
+        message: 'This route has child routes. Delete child routes first.',
+        variant: 'warning'
+      });
+      return;
+    }
 
-      if (!shouldDelete) {
-        return;
-      }
+    const shouldDelete = await this.themedDialogService.confirm({
+      title: 'Delete route?',
+      message: `Are you sure you want to delete /${uri}?`,
+      variant: 'danger',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    });
+
+    if (!shouldDelete) {
+      return;
     }
 
     this.successMessage = '';
@@ -267,9 +282,6 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     return this.expandedUris.has(uri);
   }
 
-  canDelete(uri: string): boolean {
-    return !this.contentService.hasDescendantPages(uri);
-  }
 
   get paginatedTemplateTree(): TemplateTreeNode[] {
     const start = this.currentPageIndex * this.pageSize;

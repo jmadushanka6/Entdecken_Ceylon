@@ -1,0 +1,17 @@
+<ng-container *ngIf="themedDialogService.activeDialog() as dialog">
+  <div class="dialog-backdrop" (click)="themedDialogService.dismiss()"></div>
+
+  <section class="dialog-card" [attr.data-variant]="dialog.variant" role="alertdialog" aria-modal="true">
+    <h3>{{ dialog.title }}</h3>
+    <p>{{ dialog.message }}</p>
+
+    <div class="dialog-actions">
+      <button type="button" class="secondary" *ngIf="dialog.kind === 'confirm'" (click)="themedDialogService.cancel()">
+        {{ dialog.cancelText }}
+      </button>
+      <button type="button" class="primary" [attr.data-variant]="dialog.variant" (click)="themedDialogService.acknowledge()">
+        {{ dialog.confirmText }}
+      </button>
+    </div>
+  </section>
+</ng-container>
