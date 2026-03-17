@@ -1,7 +1,11 @@
-<ng-container *ngIf="themedDialogService.activeDialog() as dialog">
-  <div class="dialog-backdrop" (click)="themedDialogService.dismiss()"></div>
-
-  <section class="dialog-card" [attr.data-variant]="dialog.variant" role="alertdialog" aria-modal="true">
+<dialog
+  #dialogElement
+  class="dialog-card"
+  [attr.data-variant]="themedDialogService.activeDialog()?.variant ?? null"
+  (cancel)="onDialogCancel($event)"
+  (click)="onDialogClick($event)"
+>
+  <ng-container *ngIf="themedDialogService.activeDialog() as dialog">
     <h3>{{ dialog.title }}</h3>
     <p>{{ dialog.message }}</p>
 
@@ -13,5 +17,5 @@
         {{ dialog.confirmText }}
       </button>
     </div>
-  </section>
-</ng-container>
+  </ng-container>
+</dialog>
