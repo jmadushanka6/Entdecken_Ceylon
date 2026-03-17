@@ -1,0 +1,93 @@
+:host {
+  --dialog-bg: #fff;
+  --dialog-text: #1f2f2a;
+  --dialog-border: #e3daca;
+  --dialog-muted: #2f463d;
+  --dialog-primary: #2e4f44;
+  --dialog-secondary: #eff4f5;
+  --dialog-secondary-text: #214237;
+  --dialog-warning: #9a6a18;
+  --dialog-danger: #a63b35;
+}
+
+:host-context(body.theme-dark) {
+  --dialog-bg: #192421;
+  --dialog-text: #e8f4ee;
+  --dialog-border: #314842;
+  --dialog-muted: #c8ddd4;
+  --dialog-primary: #295e52;
+  --dialog-secondary: #243735;
+  --dialog-secondary-text: #e8f4ee;
+  --dialog-warning: #d19a39;
+  --dialog-danger: #e27b72;
+}
+
+.dialog-card {
+  width: min(92vw, 30rem);
+  border-radius: 1rem;
+  border: 1px solid var(--dialog-border);
+  background: var(--dialog-bg);
+  color: var(--dialog-text);
+  box-shadow: 0 18px 38px rgb(16 25 23 / 35%);
+  padding: 1.15rem;
+}
+
+.dialog-card::backdrop {
+  background: rgb(16 25 23 / 55%);
+}
+
+.dialog-card h3 {
+  margin: 0;
+  color: var(--dialog-text);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.65rem;
+}
+
+.dialog-card p {
+  margin: 0.75rem 0 0;
+  line-height: 1.6;
+  color: var(--dialog-muted);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+button {
+  width: fit-content;
+  padding: 0.6rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+}
+
+button.secondary {
+  background: var(--dialog-secondary);
+  color: var(--dialog-secondary-text);
+  border-color: var(--dialog-border);
+}
+
+button.primary {
+  background: var(--dialog-primary);
+  color: #fff;
+}
+
+button.primary[data-variant='warning'] {
+  background: var(--dialog-warning);
+}
+
+button.primary[data-variant='danger'] {
+  background: var(--dialog-danger);
+}
+
+.dialog-card[data-variant='warning'] {
+  border-color: var(--dialog-warning);
+}
+
+.dialog-card[data-variant='danger'] {
+  border-color: var(--dialog-danger);
+}
