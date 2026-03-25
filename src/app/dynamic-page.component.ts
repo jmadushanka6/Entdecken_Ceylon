@@ -14,12 +14,15 @@ import { ContentPage, ContentService } from './content.service';
   styleUrl: './dynamic-page.component.scss'
 })
 export class DynamicPageComponent implements OnInit, OnDestroy {
+  private static readonly HERO_IMAGE_LOAD_TIMEOUT_MS = 20000;
+
   page: ContentPage | null = null;
   safeBodyHtml: SafeHtml | null = null;
   isPageLoading = true;
   isHeroImageLoading = false;
 
   private routeSubscription?: Subscription;
+  private imageLoadTimeoutId?: ReturnType<typeof setTimeout>;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -46,7 +49,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
           : null;
 
         this.isPageLoading = false;
-        this.isHeroImageLoading = !!this.page?.heroImageUrl;
+        this.startHeroImageLoading(this.page?.heroImageUrl);
         this.updateMetadata();
       }
     );
@@ -54,9 +57,11 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+    this.clearHeroImageTimeout();
   }
 
   onHeroImageLoaded(): void {
+    this.clearHeroImageTimeout();
     this.isHeroImageLoading = false;
   }
 
@@ -90,5 +95,27 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
     }
 
     canonicalElement.setAttribute('href', canonicalUrl);
+  }
+
+  private startHeroImageLoading(heroImageUrl?: string): void {
+    this.clearHeroImageTimeout();
+    this.isHeroImageLoading = !!heroImageUrl;
+
+    if (!heroImageUrl) {
+      return;
+    }
+
+    this.imageLoadTimeoutId = setTimeout(() => {
+      this.isHeroImageLoading = false;
+    }, DynamicPageComponent.HERO_IMAGE_LOAD_TIMEOUT_MS);
+  }
+
+  private clearHeroImageTimeout(): void {
+    if (!this.imageLoadTimeoutId) {
+      return;
+    }
+
+    clearTimeout(this.imageLoadTimeoutId);
+    this.imageLoadTimeoutId = undefined;
   }
 }
