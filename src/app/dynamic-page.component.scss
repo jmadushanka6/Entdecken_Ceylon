@@ -19,7 +19,7 @@
 }
 
 .loader-card,
-.image-loader {
+.image-skeleton {
   display: grid;
   place-items: center;
   gap: 0.75rem;
@@ -50,13 +50,33 @@
 
 .dynamic-page__image-wrapper {
   position: relative;
+  min-height: clamp(14rem, 42vw, 24rem);
 }
 
-.image-loader {
+.image-skeleton {
   position: absolute;
   inset: 0;
   border-radius: 0.85rem;
-  background: color-mix(in srgb, var(--surface-card) 75%, transparent);
+  background: linear-gradient(
+    110deg,
+    color-mix(in srgb, var(--surface-card) 88%, var(--bg) 12%) 8%,
+    color-mix(in srgb, var(--surface-card) 72%, var(--link) 28%) 18%,
+    color-mix(in srgb, var(--surface-card) 88%, var(--bg) 12%) 33%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-wave 1.4s ease-in-out infinite;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .dynamic-page__hero-image {
@@ -109,5 +129,11 @@ h1 {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes skeleton-wave {
+  to {
+    background-position-x: -200%;
   }
 }

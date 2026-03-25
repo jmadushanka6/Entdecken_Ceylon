@@ -12,9 +12,8 @@
 
       <header class="dynamic-page__hero">
         <div class="dynamic-page__image-wrapper" *ngIf="page.heroImageUrl">
-          <div class="image-loader" *ngIf="isHeroImageLoading">
-            <div class="loader-spinner"></div>
-            <span>Loading image...</span>
+          <div class="image-skeleton" *ngIf="isHeroImageLoading" aria-hidden="true">
+            <span class="visually-hidden">Loading image...</span>
           </div>
           <img
             class="dynamic-page__hero-image"
