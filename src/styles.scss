@@ -1,7 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+// Fonts are self-hosted via @fontsource (see angular.json "styles"), so no
+// visitor data is sent to Google Fonts (cf. LG München I, Az. 3 O 17493/20).
+@use 'styles/prose';
 
-* {
+// ---------------------------------------------------------------------------
+// Design tokens
+// ---------------------------------------------------------------------------
+:root {
+  --bg: #f5f1e8;
+  --text: #1f2f2a;
+  --surface-soft: #f9f6ef;
+  --surface-card: #fff;
+  --border: #e3daca;
+  --title: #21372f;
+  --muted: #2f463d;
+  --link: #2a4f8d;
+  --accent: #56786b;
+  --cta-primary: #2e4f44;
+  --cta-secondary-bg: #eff4f5;
+  --cta-secondary-text: #214237;
+
+  --info-bg: #edf4f0;
+  --info-border: #9cc2ae;
+  --warn-bg: #fbf2df;
+  --warn-border: #d9b16a;
+
+  --season-ideal-bg: #2e7d5b;
+  --season-ideal-text: #fff;
+  --season-good-bg: #b7dcc5;
+  --season-good-text: #12382a;
+  --season-mixed-bg: #f2e1b3;
+  --season-mixed-text: #4a3a12;
+  --season-rain-bg: #b4c7d8;
+  --season-rain-text: #142838;
+
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+
+  color-scheme: light;
+}
+
+body.theme-dark {
+  --bg: #101917;
+  --text: #e8f4ee;
+  --surface-soft: #1a2724;
+  --surface-card: #192421;
+  --border: #314842;
+  --title: #e8f4ee;
+  --muted: #c8ddd4;
+  --link: #95c1ff;
+  --accent: #9fc7b5;
+  --cta-primary: #295e52;
+  --cta-secondary-bg: #243735;
+  --cta-secondary-text: #e8f4ee;
+
+  --info-bg: #182b26;
+  --info-border: #3d6657;
+  --warn-bg: #2e2617;
+  --warn-border: #8a6a32;
+
+  --season-ideal-bg: #2f7a58;
+  --season-ideal-text: #fff;
+  --season-good-bg: #2b5243;
+  --season-good-text: #dff3e8;
+  --season-mixed-bg: #574820;
+  --season-mixed-text: #f6e7bf;
+  --season-rain-bg: #2a4256;
+  --season-rain-text: #dceaf6;
+
+  color-scheme: dark;
+}
+
+// ---------------------------------------------------------------------------
+// Base
+// ---------------------------------------------------------------------------
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 html,
@@ -11,11 +90,208 @@ body {
 }
 
 body {
-  background: #f5f1e8;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--link);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  color: var(--title);
+  letter-spacing: 0.01em;
+  line-height: 1.15;
 }
 
 a:focus-visible,
-button:focus-visible {
-  outline: 2px solid #2a4f8d;
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--link);
   outline-offset: 2px;
+}
+
+// ---------------------------------------------------------------------------
+// Layout primitives shared by all pages
+// ---------------------------------------------------------------------------
+.container {
+  width: min(100% - 2.5rem, 72rem);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+}
+
+.section--soft {
+  padding-inline: clamp(1rem, 3vw, 2rem);
+  background: var(--surface-soft);
+  border-radius: 1rem;
+}
+
+.page-shell {
+  width: min(100% - 2.5rem, 52rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 5vw, 4rem);
+
+  h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+  }
+}
+
+.kicker {
+  margin: 0 0 0.6rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.78rem 1.35rem;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+.btn--primary {
+  background: var(--cta-primary);
+  color: #fff;
+}
+
+.btn--secondary {
+  background: var(--cta-secondary-bg);
+  color: var(--cta-secondary-text);
+  border-color: var(--border);
+}
+
+.link-cta {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--link);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-cta:hover {
+  text-decoration: underline;
+}
+
+// Aufklappbare Fragen (FAQ)
+.faq details {
+  margin-bottom: 0.8rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface-card);
+}
+
+.faq summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.faq details p {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.faq details .link-cta {
+  margin-top: 0.4rem;
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.breadcrumbs li + li::before {
+  content: '›';
+  margin-right: 0.35rem;
+  color: var(--accent);
+}
+
+.breadcrumbs a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--cta-primary);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (width <= 640px) {
+  .container,
+  .page-shell {
+    width: min(100% - 1.5rem, 72rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
