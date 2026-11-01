@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { ContentService } from './content.service';
+import { SeoService } from './seo.service';
+import { SITE_OPERATOR } from './site-operator.config';
 
 @Component({
   selector: 'app-privacy-policy',
@@ -11,11 +13,21 @@ import { RouterLink } from '@angular/router';
   styleUrl: './privacy-policy.component.scss'
 })
 export class PrivacyPolicyComponent implements OnInit {
-  consentDate = localStorage.getItem('entdecken-cookie-consent-date');
+  readonly consentDate = localStorage.getItem('entdecken-cookie-consent-date');
+  readonly operator = SITE_OPERATOR;
+  readonly usesRemoteContent: boolean;
 
-  constructor(private readonly title: Title) {}
+  constructor(
+    private readonly seo: SeoService,
+    contentService: ContentService
+  ) {
+    this.usesRemoteContent = contentService.isRemoteContentEnabled();
+  }
 
   ngOnInit(): void {
-    this.title.setTitle('Datenschutz & Cookies | Entdecken Ceylon');
+    this.seo.update({
+      title: 'Datenschutz & Cookies',
+      description: 'Welche Daten Entdecken Ceylon verarbeitet, auf welcher Rechtsgrundlage und welche Rechte Sie nach der DSGVO haben.'
+    });
   }
 }

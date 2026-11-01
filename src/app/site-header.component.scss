@@ -1,0 +1,137 @@
+.site-header {
+  position: relative;
+  z-index: 20;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-soft);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.25rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-right: auto;
+  color: var(--cta-primary);
+  text-decoration: none;
+}
+
+:host-context(body.theme-dark) .brand {
+  color: var(--accent);
+}
+
+.brand__mark {
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+}
+
+.brand__name {
+  color: var(--title);
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.main-nav ul {
+  display: flex;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main-nav a {
+  display: block;
+  padding: 0.5rem 0.7rem;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.main-nav a:hover {
+  background: var(--cta-secondary-bg);
+}
+
+.main-nav a.is-active {
+  background: var(--cta-primary);
+  color: #fff;
+}
+
+.menu-toggle,
+.theme-toggle {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-card);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  font-weight: 600;
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+  font-size: 1.05rem;
+}
+
+@media (width <= 1080px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    inset: 100% 0 auto;
+    padding: 0.75rem 1rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-soft);
+    box-shadow: 0 14px 24px rgb(16 25 23 / 12%);
+  }
+
+  .main-nav--open {
+    display: block;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    width: min(100%, 72rem);
+    margin-inline: auto;
+  }
+
+  .main-nav a {
+    padding: 0.7rem 0.9rem;
+    border-radius: 0.6rem;
+    font-size: 1rem;
+  }
+}
+
+@media (width <= 420px) {
+  .brand__name {
+    font-size: 1.3rem;
+  }
+
+  .menu-toggle {
+    padding-inline: 0.7rem;
+  }
+}

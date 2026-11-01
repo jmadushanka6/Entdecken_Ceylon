@@ -1,0 +1,51 @@
+<div class="page-shell prose">
+  <p class="kicker">Anbieterkennzeichnung</p>
+  <h1>Impressum</h1>
+
+  <h2>Angaben gemäß § 5 DDG</h2>
+  <p>
+    {{ operator.name }}<br />
+    {{ operator.street }}<br />
+    {{ operator.postalCode }} {{ operator.city }}<br />
+    {{ operator.country }}
+  </p>
+  <p *ngIf="operator.representedBy"><strong>Vertreten durch:</strong> {{ operator.representedBy }}</p>
+
+  <h2>Kontakt</h2>
+  <p>
+    E-Mail: <a [href]="'mailto:' + operator.email">{{ operator.email }}</a>
+    <ng-container *ngIf="operator.phone"><br />Telefon: {{ operator.phone }}</ng-container>
+  </p>
+
+  <ng-container *ngIf="operator.register">
+    <h2>Registereintrag</h2>
+    <p>{{ operator.register }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="operator.vatId">
+    <h2>Umsatzsteuer-ID</h2>
+    <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {{ operator.vatId }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="operator.editorialResponsible">
+    <h2>Redaktionell verantwortlich</h2>
+    <p>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV: {{ operator.editorialResponsible }}, Anschrift wie oben.</p>
+  </ng-container>
+
+  <h2>Hinweis zu den Reiseinformationen</h2>
+  <p>
+    Wir stellen alle Inhalte mit großer Sorgfalt zusammen und geben auf jeder Ratgeberseite an, wann sie zuletzt geprüft wurde.
+    Einreise-, Sicherheits- und Gesundheitsbestimmungen können sich jedoch kurzfristig ändern. Alle Angaben erfolgen deshalb ohne
+    Gewähr; maßgeblich sind die Informationen der zuständigen Behörden, insbesondere des
+    <a [href]="foreignOfficeUrl" target="_blank" rel="noopener noreferrer">Auswärtigen Amts</a>.
+  </p>
+
+  <h2>Haftung für Links</h2>
+  <p>
+    Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der
+    verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich. Werden uns Rechtsverletzungen bekannt,
+    entfernen wir die betreffenden Links umgehend.
+  </p>
+
+  <p class="small"><a routerLink="/datenschutz">Datenschutzerklärung</a> · <a routerLink="/kontakt">Kontakt</a></p>
+</div>
