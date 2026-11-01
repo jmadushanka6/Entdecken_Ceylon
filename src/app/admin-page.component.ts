@@ -13,7 +13,7 @@ import { ThemedDialogService } from './themed-dialog.service';
 
 interface AdminPageDraft {
   version: 1;
-  value: Omit<ContentPage, 'bodyHtml'> & { bodyHtml: string };
+  value: Omit<ContentPage, 'bodyHtml' | 'lastReviewed'> & { bodyHtml: string; lastReviewed: string };
 }
 
 interface TemplateTreeNode {
@@ -66,7 +66,8 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     description: ['', [Validators.required]],
     heroImageUrl: [''],
     customCss: [''],
-    bodyHtml: ['']
+    bodyHtml: [''],
+    lastReviewed: ['', [Validators.pattern('^\\d{4}-\\d{2}-\\d{2}$')]]
   });
 
   private draftSubscription?: Subscription;
@@ -108,8 +109,44 @@ export class AdminPageComponent implements OnInit, OnDestroy {
 
     return {
       ...formValue,
-      bodyHtml: formValue.bodyHtml?.trim() || undefined
+      bodyHtml: formValue.bodyHtml?.trim() || undefined,
+      lastReviewed: formValue.lastReviewed?.trim() || undefined
     };
+  }
+
+  /** Mitgelieferte Starterseiten; eine CMS-Seite mit gleicher URI ersetzt sie. */
+  get builtInPages(): ContentPage[] {
+    return this.contentService.getBuiltInPages();
+  }
+
+  isOverridden(uri: string): boolean {
+    return this.contentService.getPages().some((page) => page.uri === uri);
+  }
+
+  /** Lädt eine Starterseite als Vorlage ins Formular, um sie als CMS-Seite anzupassen. */
+  customizeBuiltIn(uri: string): void {
+    if (this.isOverridden(uri)) {
+      this.editTemplate(uri);
+      return;
+    }
+
+    const page = this.builtInPages.find((builtIn) => builtIn.uri === uri);
+
+    if (!page) {
+      return;
+    }
+
+    this.editingUri = null;
+    this.pageForm.patchValue({
+      uri: page.uri,
+      title: page.title,
+      description: page.description,
+      heroImageUrl: page.heroImageUrl,
+      customCss: page.customCss,
+      bodyHtml: page.bodyHtml ?? '',
+      lastReviewed: page.lastReviewed ?? ''
+    });
+    this.pageForm.controls.uri.updateValueAndValidity();
   }
 
   login(): void {
@@ -256,7 +293,8 @@ export class AdminPageComponent implements OnInit, OnDestroy {
       description: page.description,
       heroImageUrl: page.heroImageUrl,
       customCss: page.customCss,
-      bodyHtml: page.bodyHtml ?? ''
+      bodyHtml: page.bodyHtml ?? '',
+      lastReviewed: page.lastReviewed ?? ''
     });
     this.editingUri = page.uri;
     this.pageForm.markAsPristine();
@@ -393,7 +431,8 @@ export class AdminPageComponent implements OnInit, OnDestroy {
         description: typeof parsed.value.description === 'string' ? parsed.value.description : '',
         heroImageUrl: typeof parsed.value.heroImageUrl === 'string' ? parsed.value.heroImageUrl : '',
         customCss: typeof parsed.value.customCss === 'string' ? parsed.value.customCss : '',
-        bodyHtml: typeof parsed.value.bodyHtml === 'string' ? parsed.value.bodyHtml : ''
+        bodyHtml: typeof parsed.value.bodyHtml === 'string' ? parsed.value.bodyHtml : '',
+        lastReviewed: typeof parsed.value.lastReviewed === 'string' ? parsed.value.lastReviewed : ''
       });
     } catch {
       // Ignore parse errors and leave form empty.

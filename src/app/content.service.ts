@@ -9,6 +9,8 @@ export interface ContentPage {
   heroImageUrl: string;
   customCss: string;
   bodyHtml?: string;
+  /** ISO-Datum (YYYY-MM-DD) der letzten inhaltlichen Prüfung, angezeigt als „Stand“. */
+  lastReviewed?: string;
 }
 
 interface StoredContentPages {
@@ -33,26 +35,46 @@ export class ContentService {
 
   readonly pagesLoaded$ = this.pagesLoadedSubject.asObservable();
 
-  private readonly defaultPages: ContentPage[] = [
-    {
-      uri: 'best-sri-lanka-route',
-      title: 'Best Sri Lanka Route',
-      description: 'A handpicked route through Sri Lanka.',
-      heroImageUrl: 'https://images.example.com/best-route.jpg',
-      customCss: ''
-    }
-  ];
+  /**
+   * Redaktionelle Starterseiten (siehe built-in-pages.ts). Sie sorgen dafür, dass
+   * alle Links der Startseite auf Inhalte führen. Eine CMS-Seite mit gleicher URI
+   * ersetzt die jeweilige Starterseite. Werden als eigener Chunk nachgeladen,
+   * damit die Startseite schlank bleibt.
+   */
+  private builtInPages = new Map<string, ContentPage>();
 
   constructor() {
     this.initializePages();
   }
 
+  /** Seiten aus dem CMS (Firestore bzw. lokaler Speicher), ohne Starterseiten. */
   getPages(): ContentPage[] {
     return [...this.pages].sort((a, b) => a.uri.localeCompare(b.uri));
   }
 
+  /** Mitgelieferte Starterseiten, unabhängig davon, ob sie im CMS ersetzt wurden. */
+  getBuiltInPages(): ContentPage[] {
+    return [...this.builtInPages.values()].sort((a, b) => a.uri.localeCompare(b.uri));
+  }
+
+  isBuiltInUri(uri: string): boolean {
+    return this.builtInPages.has(uri);
+  }
+
+  /** Alle öffentlich erreichbaren Seiten: CMS-Seiten plus nicht ersetzte Starterseiten. */
+  getPublishedPages(): ContentPage[] {
+    const pagesByUri = new Map(this.builtInPages);
+    this.pages.forEach((page) => pagesByUri.set(page.uri, page));
+    return [...pagesByUri.values()].sort((a, b) => a.uri.localeCompare(b.uri));
+  }
+
   getPageByUri(uri: string): ContentPage | undefined {
-    return this.pages.find((page) => page.uri === uri);
+    return this.pages.find((page) => page.uri === uri) ?? this.builtInPages.get(uri);
+  }
+
+  /** True, sobald Inhalte aus Google Cloud Firestore geladen werden (relevant für die Datenschutzerklärung). */
+  isRemoteContentEnabled(): boolean {
+    return this.hasFirebaseConfig();
   }
 
   isUriTaken(uri: string, excludeUri?: string): boolean {
@@ -124,16 +146,20 @@ export class ContentService {
   }
 
   private async initializePages(): Promise<void> {
-    const remotePages = await this.loadPagesFromFirestore();
+    const [remotePages, builtInPages] = await Promise.all([this.loadPagesFromFirestore(), this.loadBuiltInPages()]);
 
+    this.builtInPages = new Map(builtInPages.map((page) => [page.uri, page]));
     this.pages.splice(0, this.pages.length, ...(remotePages ?? this.loadPagesFromStorage()));
-
-    if (!this.pages.length) {
-      this.pages.push(...this.defaultPages);
-      this.persistPages();
-    }
-
     this.pagesLoadedSubject.next(true);
+  }
+
+  private async loadBuiltInPages(): Promise<ContentPage[]> {
+    try {
+      const { BUILT_IN_PAGES } = await import('./built-in-pages');
+      return BUILT_IN_PAGES;
+    } catch {
+      return [];
+    }
   }
 
   private async loadPagesFromFirestore(): Promise<ContentPage[] | null> {
@@ -202,25 +228,25 @@ export class ContentService {
 
   private loadPagesFromStorage(): ContentPage[] {
     if (typeof localStorage === 'undefined') {
-      return [...this.defaultPages];
+      return [];
     }
 
     const rawValue = localStorage.getItem(ContentService.STORAGE_KEY);
 
     if (!rawValue) {
-      return [...this.defaultPages];
+      return [];
     }
 
     try {
       const parsed = JSON.parse(rawValue) as Partial<StoredContentPages>;
 
       if (parsed.version !== 1 || !Array.isArray(parsed.pages)) {
-        return [...this.defaultPages];
+        return [];
       }
 
       return parsed.pages.filter((page): page is ContentPage => this.isValidPage(page));
     } catch {
-      return [...this.defaultPages];
+      return [];
     }
   }
 
@@ -247,7 +273,8 @@ export class ContentService {
       typeof candidate.description === 'string' &&
       typeof candidate.heroImageUrl === 'string' &&
       typeof candidate.customCss === 'string' &&
-      (typeof candidate.bodyHtml === 'undefined' || typeof candidate.bodyHtml === 'string')
+      (typeof candidate.bodyHtml === 'undefined' || typeof candidate.bodyHtml === 'string') &&
+      (typeof candidate.lastReviewed === 'undefined' || typeof candidate.lastReviewed === 'string')
     );
   }
 
@@ -281,13 +308,15 @@ export class ContentService {
       description: { stringValue: page.description },
       heroImageUrl: { stringValue: page.heroImageUrl },
       customCss: { stringValue: page.customCss },
-      bodyHtml: { stringValue: page.bodyHtml ?? '' }
+      bodyHtml: { stringValue: page.bodyHtml ?? '' },
+      lastReviewed: { stringValue: page.lastReviewed ?? '' }
     };
   }
 
   private fromFirestoreDocument(documentValue: FirestoreDocument): ContentPage | null {
     const fields = documentValue.fields ?? {};
     const bodyHtml = fields['bodyHtml']?.stringValue ?? '';
+    const lastReviewed = fields['lastReviewed']?.stringValue ?? '';
 
     const page: ContentPage = {
       uri: fields['uri']?.stringValue ?? '',
@@ -295,7 +324,8 @@ export class ContentService {
       description: fields['description']?.stringValue ?? '',
       heroImageUrl: fields['heroImageUrl']?.stringValue ?? '',
       customCss: fields['customCss']?.stringValue ?? '',
-      bodyHtml: bodyHtml || undefined
+      bodyHtml: bodyHtml || undefined,
+      lastReviewed: lastReviewed || undefined
     };
 
     return this.isValidPage(page) ? page : null;

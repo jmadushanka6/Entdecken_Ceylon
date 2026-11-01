@@ -71,6 +71,25 @@
       </div>
     </section>
 
+    <section class="templates-list">
+      <h2>Built-in starter pages</h2>
+      <p>
+        These German guide pages ship with the site so that every homepage link works. Save a CMS page with the same URI to replace
+        one of them.
+      </p>
+      <ul class="tree">
+        <li *ngFor="let page of builtInPages">
+          <div class="tree-node">
+            <span class="uri">{{ page.uri }}</span>
+            <span class="built-in-state">{{ isOverridden(page.uri) ? 'replaced by CMS page' : 'built-in' }}</span>
+            <button type="button" class="secondary" (click)="customizeBuiltIn(page.uri)">
+              {{ isOverridden(page.uri) ? 'Edit CMS page' : 'Customize' }}
+            </button>
+          </div>
+        </li>
+      </ul>
+    </section>
+
     <form [formGroup]="pageForm" (ngSubmit)="submit()" novalidate>
       <label>
         URI
@@ -116,6 +135,14 @@
         Body HTML (optional)
         <textarea rows="8" formControlName="bodyHtml" placeholder="<h2>Welcome</h2><p>...</p>"></textarea>
       </label>
+
+      <label>
+        Last reviewed (optional, shown to visitors as „Stand“)
+        <input type="date" formControlName="lastReviewed" />
+      </label>
+      <p class="error" *ngIf="pageForm.controls.lastReviewed.touched && pageForm.controls.lastReviewed.errors?.['pattern']">
+        Use the format YYYY-MM-DD.
+      </p>
 
       <div class="form-actions">
         <button type="submit" [disabled]="isSubmitting">

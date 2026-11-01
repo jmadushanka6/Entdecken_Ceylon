@@ -1,0 +1,45 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
+  <defs>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#cfe6e0'/>
+      <stop offset='1' stop-color='#f2e5c4'/>
+    </linearGradient>
+    <mask id='arches'>
+      <rect width='800' height='500' fill='#fff'/>
+      <g fill='#000'>
+        <path d='M107 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M173 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M239 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M305 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M371 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M437 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M503 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M569 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+        <path d='M635 420 V318 a26 26 0 0 1 52 0 V420 Z'/>
+      </g>
+    </mask>
+  </defs>
+  <rect width='800' height='500' fill='url(#sky)'/>
+  <path d='M0 210 C120 150 240 168 340 190 C450 214 560 150 680 146 C740 144 780 156 800 164 L800 500 L0 500 Z' fill='#a7c9ae'/>
+  <path d='M0 300 C140 250 260 270 360 320 C420 350 480 350 540 320 C640 268 720 262 800 280 L800 500 L0 500 Z' fill='#5f9b70'/>
+  <rect x='100' y='264' width='600' height='16' fill='#a8916f'/>
+  <rect x='100' y='280' width='600' height='150' fill='#c9b490' mask='url(#arches)'/>
+  <g fill='#2f5f9e'>
+    <rect x='170' y='224' width='118' height='40' rx='7'/>
+    <rect x='294' y='228' width='110' height='36' rx='5'/>
+    <rect x='410' y='228' width='110' height='36' rx='5'/>
+  </g>
+  <rect x='170' y='252' width='350' height='5' fill='#f2c14e'/>
+  <g fill='#e8f1fb'>
+    <rect x='182' y='233' width='22' height='12' rx='2'/><rect x='212' y='233' width='22' height='12' rx='2'/>
+    <rect x='306' y='236' width='18' height='11' rx='2'/><rect x='332' y='236' width='18' height='11' rx='2'/><rect x='358' y='236' width='18' height='11' rx='2'/>
+    <rect x='422' y='236' width='18' height='11' rx='2'/><rect x='448' y='236' width='18' height='11' rx='2'/><rect x='474' y='236' width='18' height='11' rx='2'/>
+  </g>
+  <rect x='258' y='230' width='22' height='22' rx='3' fill='#cfe0f5'/>
+  <path d='M0 400 C80 370 140 392 210 380 C280 368 330 400 400 392 C470 384 520 404 600 390 C680 376 740 396 800 384 L800 500 L0 500 Z' fill='#2f6b4a'/>
+  <g fill='#24533f'>
+    <circle cx='60' cy='392' r='34'/><circle cx='110' cy='404' r='26'/>
+    <circle cx='700' cy='384' r='36'/><circle cx='752' cy='398' r='26'/>
+    <circle cx='420' cy='410' r='22'/>
+  </g>
+</svg>

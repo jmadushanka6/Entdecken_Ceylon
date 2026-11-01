@@ -1,11 +1,30 @@
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
   <defs>
-    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0%' stop-color='#295c4d'/>
-      <stop offset='100%' stop-color='#d09b45'/>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#e9b46e'/>
+      <stop offset='1' stop-color='#f7e2b5'/>
+    </linearGradient>
+    <linearGradient id='dome' x1='0' y1='0' x2='1' y2='0'>
+      <stop offset='0' stop-color='#fffaf0'/>
+      <stop offset='1' stop-color='#e3d8c4'/>
     </linearGradient>
   </defs>
-  <rect width='800' height='500' fill='url(#g)'/>
-  <path d='M0 380 C160 310 320 430 480 350 C620 290 700 330 800 300 L800 500 L0 500 Z' fill='#154035' opacity='.65'/>
-  <circle cx='640' cy='130' r='44' fill='#ffe09a' opacity='.9'/>
+  <rect width='800' height='500' fill='url(#sky)'/>
+  <circle cx='640' cy='130' r='38' fill='#fff1c9' opacity='.9'/>
+  <path d='M195 362 C202 300 212 238 242 196 C248 188 258 184 270 183 L352 180 C368 181 376 188 382 198 C406 240 416 300 422 362 Z' fill='#6d7f63'/>
+  <path d='M242 196 C248 188 258 184 270 183 L352 180 C368 181 376 188 382 198 C360 196 280 198 242 196 Z' fill='#55684f'/>
+  <path d='M262 236 C300 252 340 248 372 234 M236 290 C290 306 350 304 408 288' stroke='#55684f' stroke-width='5' fill='none' opacity='.6'/>
+  <path d='M0 350 C40 330 80 345 120 332 C160 318 200 340 240 330 C300 315 340 338 400 326 C460 314 520 336 580 324 C640 312 700 334 800 320 L800 500 L0 500 Z' fill='#3f6f52'/>
+  <rect x='415' y='408' width='230' height='16' rx='3' fill='#e3d8c4'/>
+  <rect x='430' y='394' width='200' height='16' rx='3' fill='#f1e9d9'/>
+  <path d='M445 396 C445 318 480 276 530 276 C580 276 615 318 615 396 Z' fill='url(#dome)'/>
+  <rect x='512' y='258' width='36' height='20' rx='2' fill='#ece3d2'/>
+  <path d='M518 258 L530 170 L542 258 Z' fill='#f5eee1'/>
+  <g stroke='#d4c7ae' stroke-width='2'>
+    <path d='M521 236 H539'/><path d='M523 216 H537'/><path d='M525 196 H535'/>
+  </g>
+  <circle cx='530' cy='166' r='5' fill='#e2b65e'/>
+  <path d='M0 430 C50 410 90 428 140 414 C190 400 230 425 280 412 C330 400 380 428 410 420 L410 500 L0 500 Z' fill='#24533f'/>
+  <path d='M650 422 C700 404 750 418 800 404 L800 500 L650 500 Z' fill='#24533f'/>
+  <rect y='424' width='800' height='76' fill='#24533f'/>
 </svg>

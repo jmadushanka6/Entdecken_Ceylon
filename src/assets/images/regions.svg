@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
+  <defs>
+    <linearGradient id='sea' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0' stop-color='#cfe8e3'/>
+      <stop offset='1' stop-color='#9fcfcc'/>
+    </linearGradient>
+    <clipPath id='island'><path d='M363 42 C385 48 405 70 428 103 C440 120 445 135 452 150 C462 165 470 172 476 184 C490 210 502 232 510 250 C518 262 524 272 527 290 C533 320 540 345 539 368 C537 382 526 392 513 398 C502 412 494 428 483 436 C470 443 462 446 452 449 C440 453 430 456 420 460 C410 466 404 469 396 468 C380 466 372 462 362 456 C352 444 342 428 336 408 C330 390 324 374 322 358 C321 346 320 338 321 328 C318 300 312 260 310 220 C310 190 318 160 327 135 C333 118 340 104 345 92 C338 82 326 72 322 61 C330 50 345 42 363 42 Z'/></clipPath>
+  </defs>
+  <rect width='800' height='500' fill='url(#sea)'/>
+  <g transform='translate(151.25 60.75) scale(.75)'>
+    <g clip-path='url(#island)'>
+      <rect x='300' y='30' width='260' height='450' fill='#cfdcbf'/>
+      <path d='M300 300 L352 300 L362 380 L400 420 L470 408 L505 398 L530 420 L560 480 L300 480 Z' fill='#58aeb0'/>
+      <path d='M455 150 L560 150 L560 405 L505 400 L498 320 L486 258 L468 198 Z' fill='#6f9fd0'/>
+      <path d='M360 188 L470 192 L480 262 L432 294 L380 284 L350 240 Z' fill='#e2b35d'/>
+      <ellipse cx='428' cy='346' rx='50' ry='44' fill='#3f7f68'/>
+    </g>
+    <path d='M363 42 C385 48 405 70 428 103 C440 120 445 135 452 150 C462 165 470 172 476 184 C490 210 502 232 510 250 C518 262 524 272 527 290 C533 320 540 345 539 368 C537 382 526 392 513 398 C502 412 494 428 483 436 C470 443 462 446 452 449 C440 453 430 456 420 460 C410 466 404 469 396 468 C380 466 372 462 362 456 C352 444 342 428 336 408 C330 390 324 374 322 358 C321 346 320 338 321 328 C318 300 312 260 310 220 C310 190 318 160 327 135 C333 118 340 104 345 92 C338 82 326 72 322 61 C330 50 345 42 363 42 Z' fill='none' stroke='#f4faf4' stroke-width='6' stroke-linejoin='round'/>
+  </g>
+  <rect x='50' y='150' width='300' height='200' rx='20' fill='#fffaf0'/>
+  <g font-family='Arial, sans-serif' font-size='22' fill='#21372f'>
+    <rect x='76' y='174' width='26' height='26' rx='6' fill='#e2b35d'/><text x='116' y='195'>Kulturdreieck</text>
+    <rect x='76' y='216' width='26' height='26' rx='6' fill='#3f7f68'/><text x='116' y='237'>Hochland</text>
+    <rect x='76' y='258' width='26' height='26' rx='6' fill='#58aeb0'/><text x='116' y='279'>Westküste &amp; Süden</text>
+    <rect x='76' y='300' width='26' height='26' rx='6' fill='#6f9fd0'/><text x='116' y='321'>Ostküste</text>
+  </g>
+</svg>

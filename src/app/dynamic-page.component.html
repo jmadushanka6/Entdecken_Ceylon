@@ -1,49 +1,74 @@
-<main class="dynamic-page-wrapper" *ngIf="isPageLoading; else pageContent">
+<div class="dynamic-page-wrapper" *ngIf="isPageLoading; else pageContent">
   <section class="loader-card" aria-live="polite" aria-busy="true">
     <div class="loader-spinner"></div>
-    <p>Content is loading from Firebase...</p>
+    <p>Inhalte werden geladen …</p>
   </section>
-</main>
+</div>
 
 <ng-template #pageContent>
-  <main class="dynamic-page-wrapper" *ngIf="page; else pageNotFound">
+  <div class="dynamic-page-wrapper" *ngIf="page; else pageNotFound">
     <article class="dynamic-page">
       <style *ngIf="currentCustomCss" [textContent]="currentCustomCss"></style>
+
+      <nav class="breadcrumbs" aria-label="Brotkrümelnavigation">
+        <ol>
+          <li><a routerLink="/">Startseite</a></li>
+          <li *ngFor="let crumb of breadcrumbs">
+            <a [routerLink]="crumb.path">{{ crumb.label }}</a>
+          </li>
+          <li aria-current="page">{{ page.title }}</li>
+        </ol>
+      </nav>
 
       <header class="dynamic-page__hero">
         <div class="dynamic-page__image-wrapper" *ngIf="page.heroImageUrl">
           <div class="image-loader" *ngIf="isHeroImageLoading">
             <div class="loader-spinner"></div>
-            <span>Loading image...</span>
+            <span>Bild wird geladen …</span>
           </div>
           <img
             class="dynamic-page__hero-image"
             [class.dynamic-page__hero-image--hidden]="isHeroImageLoading"
             [src]="page.heroImageUrl"
-            [alt]="page.title"
+            alt=""
             decoding="async"
             (load)="onHeroImageLoaded()"
             (error)="onHeroImageLoaded()"
           />
         </div>
         <h1>{{ page.title }}</h1>
+        <p class="dynamic-page__meta" *ngIf="page.lastReviewed">
+          Stand: <time [attr.datetime]="page.lastReviewed">{{ page.lastReviewed | date: 'MMMM y' }}</time>
+          · Angaben ohne Gewähr
+        </p>
       </header>
 
       <section class="dynamic-page__description">
         <p>{{ page.description }}</p>
       </section>
 
-      <section *ngIf="safeBodyHtml" class="dynamic-page__body" [innerHTML]="safeBodyHtml"></section>
+      <section
+        *ngIf="safeBodyHtml"
+        class="dynamic-page__body prose"
+        [innerHTML]="safeBodyHtml"
+        (click)="onBodyClick($event)"
+      ></section>
     </article>
-  </main>
+  </div>
 </ng-template>
 
 <ng-template #pageNotFound>
-  <main class="dynamic-page-wrapper">
-    <article class="dynamic-page">
+  <div class="dynamic-page-wrapper">
+    <article class="dynamic-page dynamic-page--not-found">
       <h1>Seite nicht gefunden</h1>
-      <p>Für diese URL wurde noch kein Inhalt veröffentlicht.</p>
-      <a routerLink="/">Zurück zur Startseite</a>
+      <p>Unter dieser Adresse gibt es (noch) keinen Inhalt. Vielleicht hilft Ihnen einer dieser Einstiege weiter:</p>
+      <ul>
+        <li><a routerLink="/reise-planen">Sri-Lanka-Reise planen</a></li>
+        <li><a routerLink="/routen">Routen für 10 und 14 Tage</a></li>
+        <li><a routerLink="/orte">Regionen im Überblick</a></li>
+        <li><a routerLink="/sitemap">Alle Seiten (Sitemap)</a></li>
+      </ul>
+      <a class="btn btn--primary" routerLink="/">Zur Startseite</a>
     </article>
-  </main>
+  </div>
 </ng-template>

@@ -1,13 +1,27 @@
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'>
   <defs>
-    <linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0%' stop-color='#0b3d38'/>
-      <stop offset='55%' stop-color='#2d6a5d'/>
-      <stop offset='100%' stop-color='#b1843e'/>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#0e3f3a'/>
+      <stop offset='.55' stop-color='#3b7a68'/>
+      <stop offset='1' stop-color='#f0c27a'/>
     </linearGradient>
+    <radialGradient id='glow' cx='.72' cy='.58' r='.45'>
+      <stop offset='0' stop-color='#ffe3a3' stop-opacity='.85'/>
+      <stop offset='1' stop-color='#ffe3a3' stop-opacity='0'/>
+    </radialGradient>
   </defs>
-  <rect width='1600' height='900' fill='url(#bg)'/>
-  <path d='M0 730 C320 560 640 870 960 700 C1200 580 1380 700 1600 610 L1600 900 L0 900 Z' fill='#11352f' opacity='.5'/>
-  <circle cx='1260' cy='220' r='90' fill='#ffd17a' opacity='.85'/>
-  <text x='80' y='130' font-size='58' fill='#fff8ea' font-family='Georgia,serif'>Entdecken Ceylon</text>
+  <rect width='1600' height='900' fill='url(#sky)'/>
+  <rect width='1600' height='900' fill='url(#glow)'/>
+  <circle cx='1150' cy='520' r='95' fill='#ffd889'/>
+  <path d='M0 560 L180 470 L320 520 L470 430 L640 505 L820 420 L980 500 L1140 440 L1300 500 L1460 450 L1600 490 L1600 900 L0 900 Z' fill='#5d8f78' opacity='.6'/>
+  <path d='M0 640 C120 590 230 600 340 560 C460 515 560 570 680 545 C820 515 900 585 1040 560 C1180 535 1270 590 1400 565 C1480 550 1550 560 1600 555 L1600 900 L0 900 Z' fill='#3c7461'/>
+  <path d='M120 612 C400 592 700 627 980 602 C1200 584 1400 602 1600 592' stroke='#fff' stroke-opacity='.2' stroke-width='18' fill='none' stroke-linecap='round'/>
+  <path d='M0 700 C150 660 260 690 400 650 C560 605 660 680 820 650 C980 620 1080 690 1240 665 C1380 645 1480 680 1600 660 L1600 900 L0 900 Z' fill='#285d4e'/>
+  <path d='M0 722 C300 702 600 737 900 714 C1150 696 1400 722 1600 707' stroke='#fff' stroke-opacity='.13' stroke-width='24' fill='none' stroke-linecap='round'/>
+  <path d='M0 790 C180 740 330 780 520 745 C720 710 860 780 1060 760 C1260 740 1400 790 1600 765 L1600 900 L0 900 Z' fill='#16443a'/>
+  <g fill='none' stroke='#0e3f3a' stroke-width='4' stroke-linecap='round' opacity='.55'>
+    <path d='M1010 300 l14 10 l14 -10'/>
+    <path d='M1062 268 l10 7 l10 -7'/>
+    <path d='M962 332 l9 6 l9 -6'/>
+  </g>
 </svg>

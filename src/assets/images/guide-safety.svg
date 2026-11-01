@@ -1,11 +1,15 @@
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
   <defs>
-    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0%' stop-color='#295c4d'/>
-      <stop offset='100%' stop-color='#d09b45'/>
+    <linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0' stop-color='#2f6b57'/>
+      <stop offset='1' stop-color='#6aa88a'/>
     </linearGradient>
   </defs>
-  <rect width='800' height='500' fill='url(#g)'/>
-  <path d='M0 380 C160 310 320 430 480 350 C620 290 700 330 800 300 L800 500 L0 500 Z' fill='#154035' opacity='.65'/>
-  <circle cx='640' cy='130' r='44' fill='#ffe09a' opacity='.9'/>
+  <rect width='800' height='500' fill='url(#bg)'/>
+  <circle cx='150' cy='120' r='95' fill='#fff' opacity='.07'/>
+  <circle cx='670' cy='400' r='125' fill='#fff' opacity='.07'/>
+  <path d='M0 420 C160 395 300 425 420 410 C560 392 680 420 800 405 L800 500 L0 500 Z' fill='#245846' opacity='.6'/>
+  <path d='M400 105 L520 150 C520 260 480 345 400 392 C320 345 280 260 280 150 Z' fill='#f7f1e3'/>
+  <path d='M400 128 L498 165 C498 255 465 325 400 365 Z' fill='#e9e1cf'/>
+  <path d='M345 245 L388 288 L462 205' stroke='#2e7d5b' stroke-width='22' fill='none' stroke-linecap='round' stroke-linejoin='round'/>
 </svg>
