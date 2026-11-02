@@ -1,5 +1,6 @@
 import type { ContentPage } from './content.service';
 import { OFFICIAL_SOURCES } from './official-sources';
+import { RAILWAY_STATUS } from './travel-status';
 
 /**
  * Redaktionelle Starterinhalte für Reisende aus Deutschland, Österreich und der
@@ -93,17 +94,6 @@ const seasonTable = `
 // ---------------------------------------------------------------------------
 // Wiederkehrende Bausteine
 // ---------------------------------------------------------------------------
-const railwayNotice = `
-<aside class="callout callout--warning">
-  <p><strong>Hochlandbahn nach dem Zyklon Ditwah:</strong> Ende November 2025 hat der Zyklon die Bahnstrecke
-  Colombo – Kandy – Badulla an mehr als 200 Stellen beschädigt. Seit dem 20. Juni 2026 fahren die Züge zwischen
-  <strong>Nanu Oya und Badulla</strong> – also auch über Ella – wieder. Zwischen Kandy und Nanu Oya liefen im Oktober 2026
-  noch Reparaturen; die durchgehende Verbindung soll nach offiziellen Angaben bis Ende 2026 wiederhergestellt sein.
-  Prüfen Sie den aktuellen Stand kurz vor der Reise, etwa bei Ihrer Unterkunft, Ihrem Fahrer oder bei Sri Lanka Railways.</p>
-  <p><strong>Unser Tipp:</strong> Fahren Sie mit dem Auto bis Nuwara Eliya und steigen Sie in Nanu Oya in den Zug nach Ella –
-  das ist ohnehin der landschaftlich spektakulärste Teil der Strecke.</p>
-</aside>`;
-
 const officialSourcesList = `
 <ul>
   <li>Deutschland: ${AA('Auswärtiges Amt – Sri Lanka: Reise- und Sicherheitshinweise')}</li>
@@ -290,7 +280,7 @@ möchten – das ist völlig üblich.</p>
 <h2>Zug – langsam, günstig, spektakulär</h2>
 <p>Die Bahnfahrt durch das Hochland gehört zu den schönsten der Welt. Reservierte Plätze in der 1. und 2. Klasse sind auf beliebten
 Strecken oft Wochen im Voraus ausgebucht. Unreservierte Tickets gibt es am Bahnhof – dann aber häufig im Stehen.</p>
-${railwayNotice}
+${RAILWAY_STATUS.noticeHtml}
 
 <h2>Bus – für Sparfüchse</h2>
 <p>Überlandbusse sind sehr günstig und fahren häufig, sind aber oft voll und werden zügig gefahren. Klimatisierte Expressbusse
@@ -523,10 +513,7 @@ So beginnen Sie mit Kultur und enden mit Erholung – ideal nach dem Langstrecke
   <li><strong>Tag 10: Galle und Abreise</strong>Spaziergang durch das Fort von Galle, dann über die Autobahn zum Flughafen (ca. 2,5 Std.).</li>
 </ol>
 
-<aside class="callout">
-  <p><strong>Hinweis zur Bahn:</strong> Seit Juni 2026 fahren die Züge zwischen Nanu Oya und Ella wieder; der Abschnitt ab Kandy wird
-  noch repariert. Deshalb führt diese Route mit dem Auto bis Nuwara Eliya. Mehr unter <a href="/reise-planen/transport">Unterwegs in Sri Lanka</a>.</p>
-</aside>
+${RAILWAY_STATUS.routeHintHtml}
 
 <h2>Was wir bewusst weglassen</h2>
 <p>Für Yala, Anuradhapura oder die Ostküste reichen zehn Tage kaum. Wer Safari und mehr Strandzeit möchte, wählt besser die
@@ -560,6 +547,7 @@ So beginnen Sie mit Kultur und enden mit Erholung – ideal nach dem Langstrecke
   <li><strong>Tag 11–13: Südküste</strong>Baden und Entspannen in Mirissa, Weligama oder Tangalle. Von Dezember bis April sind Walbeobachtungen möglich.</li>
   <li><strong>Tag 14: Galle und Abreise</strong>Spaziergang durch das Fort von Galle (UNESCO-Welterbe), dann über die Autobahn zum Flughafen.</li>
 </ol>
+${RAILWAY_STATUS.routeHintHtml}
 
 <aside class="callout">
   <p><strong>Sommervariante (Mai bis September):</strong> Tauschen Sie die Südküste gegen die Ostküste. Nach dem Kulturdreieck
@@ -657,7 +645,7 @@ Reisenden wohnen zentral in Sigiriya, Habarana oder Dambulla und erkunden die Re
   <li>Nachmittags regnet es im Hochland häufig. Wanderungen am besten morgens unternehmen.</li>
   <li>Bei einer Führung durch eine Teefabrik erfahren Sie, wie Ceylon-Tee verarbeitet wird, und können direkt vor Ort kaufen.</li>
 </ul>
-${railwayNotice}`
+${RAILWAY_STATUS.noticeHtml}`
   },
 
   // -------------------------------------------------------------------------

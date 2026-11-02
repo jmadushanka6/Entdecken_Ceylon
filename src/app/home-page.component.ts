@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HeroSlide, HeroSliderComponent } from './hero-slider.component';
 import { SeoService } from './seo.service';
+import { RAILWAY_STATUS } from './travel-status';
 
 interface QuickFact {
   icon: string;
@@ -162,8 +163,7 @@ export class HomePageComponent implements OnInit {
     },
     {
       question: 'Fährt der Zug von Kandy nach Ella wieder?',
-      answer:
-        'Teilweise. Nach den Schäden durch den Zyklon Ditwah fahren die Züge zwischen Nanu Oya und Ella seit Juni 2026 wieder; der Abschnitt ab Kandy soll bis Ende 2026 repariert sein (Stand: Oktober 2026).',
+      answer: RAILWAY_STATUS.faqAnswer,
       link: { label: 'Aktueller Stand & Alternativen', href: '/reise-planen/transport' }
     }
   ];
