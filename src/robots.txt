@@ -1,0 +1,6 @@
+# robots.txt – https://entdecken-ceylon.de
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://entdecken-ceylon.de/sitemap.xml
