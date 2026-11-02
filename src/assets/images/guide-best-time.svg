@@ -1,11 +1,43 @@
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
   <defs>
-    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0%' stop-color='#295c4d'/>
-      <stop offset='100%' stop-color='#d09b45'/>
+    <linearGradient id='warm' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#f6d38f'/>
+      <stop offset='1' stop-color='#efae63'/>
+    </linearGradient>
+    <linearGradient id='cool' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#8fb4c4'/>
+      <stop offset='1' stop-color='#5f8aa0'/>
     </linearGradient>
   </defs>
-  <rect width='800' height='500' fill='url(#g)'/>
-  <path d='M0 380 C160 310 320 430 480 350 C620 290 700 330 800 300 L800 500 L0 500 Z' fill='#154035' opacity='.65'/>
-  <circle cx='640' cy='130' r='44' fill='#ffe09a' opacity='.9'/>
+  <rect width='400' height='500' fill='url(#warm)'/>
+  <rect x='400' width='400' height='500' fill='url(#cool)'/>
+  <circle cx='220' cy='160' r='50' fill='#fff1c4'/>
+  <g stroke='#fff1c4' stroke-width='8' stroke-linecap='round'>
+    <path d='M220 82 V96'/><path d='M220 224 V238'/><path d='M142 160 H156'/><path d='M284 160 H298'/>
+    <path d='M165 105 l10 10'/><path d='M265 205 l10 10'/><path d='M275 105 l-10 10'/><path d='M175 205 l-10 10'/>
+  </g>
+  <path d='M548 178 a40 40 0 0 1 72 -24 a50 50 0 0 1 92 18 a34 34 0 0 1 4 68 H556 a32 32 0 0 1 -8 -62 z' fill='#eef4f7'/>
+  <g stroke='#e3eef4' stroke-width='6' stroke-linecap='round'>
+    <path d='M584 258 l-10 24'/><path d='M624 258 l-10 24'/><path d='M664 258 l-10 24'/><path d='M704 258 l-10 24'/>
+    <path d='M604 294 l-10 24'/><path d='M644 294 l-10 24'/><path d='M684 294 l-10 24'/>
+  </g>
+  <rect x='252' y='250' width='296' height='160' rx='16' fill='#fffaf0'/>
+  <path d='M268 250 H532 a16 16 0 0 1 16 16 V284 H252 V266 a16 16 0 0 1 16 -16 Z' fill='#2e4f44'/>
+  <g fill='#f5f1e8'>
+    <circle cx='300' cy='267' r='5'/><circle cx='500' cy='267' r='5'/>
+  </g>
+  <g>
+    <rect x='264' y='298' width='38' height='46' rx='6' fill='#2e7d5b'/>
+    <rect x='311' y='298' width='38' height='46' rx='6' fill='#2e7d5b'/>
+    <rect x='358' y='298' width='38' height='46' rx='6' fill='#2e7d5b'/>
+    <rect x='405' y='298' width='38' height='46' rx='6' fill='#b7dcc5'/>
+    <rect x='452' y='298' width='38' height='46' rx='6' fill='#b4c7d8'/>
+    <rect x='499' y='298' width='38' height='46' rx='6' fill='#b4c7d8'/>
+    <rect x='264' y='352' width='38' height='46' rx='6' fill='#f2e1b3'/>
+    <rect x='311' y='352' width='38' height='46' rx='6' fill='#f2e1b3'/>
+    <rect x='358' y='352' width='38' height='46' rx='6' fill='#f2e1b3'/>
+    <rect x='405' y='352' width='38' height='46' rx='6' fill='#b4c7d8'/>
+    <rect x='452' y='352' width='38' height='46' rx='6' fill='#f2e1b3'/>
+    <rect x='499' y='352' width='38' height='46' rx='6' fill='#b7dcc5'/>
+  </g>
 </svg>

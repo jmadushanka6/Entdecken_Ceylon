@@ -1,0 +1,48 @@
+rules_version = '2';
+
+// Security rules for Entdecken Ceylon.
+//
+// Everyone may read the published pages; only the admin accounts listed below
+// may create, change or delete them. The admin page signs in with Firebase
+// Authentication and sends the ID token with every write.
+//
+// Deploy (see README): firebase deploy --only firestore
+//
+// The collection name must match FIRESTORE_COLLECTION in src/app/content.service.ts.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // TODO(owner): Replace with the UID(s) from Firebase Console → Authentication → Users.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid in ['REPLACE_WITH_ADMIN_UID'];
+    }
+
+    function isValidPage(page) {
+      return page.keys().hasOnly([
+          'uri', 'title', 'description', 'heroImageUrl', 'heroImageAlt',
+          'customCss', 'bodyHtml', 'lastReviewed'
+        ])
+        && page.uri is string && page.uri.size() > 0 && page.uri.size() <= 200
+        && page.title is string && page.title.size() > 0 && page.title.size() <= 200
+        && page.description is string && page.description.size() <= 1000
+        && page.heroImageUrl is string && page.heroImageUrl.size() <= 2000
+        && page.customCss is string && page.customCss.size() <= 20000
+        && page.bodyHtml is string && page.bodyHtml.size() <= 200000
+        && (!('heroImageAlt' in page) || (page.heroImageAlt is string && page.heroImageAlt.size() <= 300))
+        && (!('lastReviewed' in page) || page.lastReviewed is string);
+    }
+
+    // Content pages: public read, admin-only write.
+    match /y/{pageId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidPage(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

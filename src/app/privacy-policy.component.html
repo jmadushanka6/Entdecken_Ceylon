@@ -1,7 +1,7 @@
-<main class="privacy-page">
+<div class="privacy-page">
   <section class="section container privacy-header">
-    <p class="kicker">EU-Transparenz (DSGVO & ePrivacy)</p>
-    <h1>Datenschutzerklärung & Cookie-Hinweise</h1>
+    <p class="kicker">EU-Transparenz (DSGVO &amp; TDDDG)</p>
+    <h1>Datenschutzerklärung &amp; Cookie-Hinweise</h1>
     <p>
       Diese Seite erklärt, welche personenbezogenen Daten verarbeitet werden, welche Rechtsgrundlagen gelten und wie Sie Ihre Rechte nach
       Art. 12–23 DSGVO ausüben können.
@@ -12,46 +12,81 @@
 
   <section class="section section--soft container policy-grid">
     <article>
-      <h2>1. Verantwortliche Stelle</h2>
-      <p>Entdecken Ceylon Reiseguide<br />Musterstraße 12, 10115 Berlin, Deutschland<br />E-Mail: datenschutz&#64;entdecken-ceylon.de</p>
+      <h2>Verantwortliche Stelle</h2>
+      <p>
+        {{ operator.name }}<br />
+        {{ operator.street }}, {{ operator.postalCode }} {{ operator.city }}, {{ operator.country }}<br />
+        E-Mail: <a [href]="'mailto:' + operator.privacyEmail">{{ operator.privacyEmail }}</a>
+      </p>
+      <p>Weitere Angaben finden Sie im <a routerLink="/impressum">Impressum</a>.</p>
     </article>
 
     <article>
-      <h2>2. Zwecke & Rechtsgrundlagen</h2>
+      <h2>Zwecke &amp; Rechtsgrundlagen</h2>
       <ul>
         <li><strong>Bereitstellung der Website:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an stabiler Auslieferung).</li>
-        <li><strong>Cookie-Einwilligung:</strong> Art. 6 Abs. 1 lit. a DSGVO i.V.m. § 25 TTDSG.</li>
+        <li>
+          <strong>Speicherung Ihrer Einstellungen im Browser:</strong> § 25 Abs. 2 Nr. 2 TDDDG (unbedingt erforderlich für den von Ihnen
+          gewünschten Dienst).
+        </li>
+        <li><strong>Optionale Analyse-Cookies:</strong> Art. 6 Abs. 1 lit. a DSGVO i.&nbsp;V.&nbsp;m. § 25 Abs. 1 TDDDG.</li>
         <li><strong>Kontaktanfragen:</strong> Art. 6 Abs. 1 lit. b oder lit. f DSGVO.</li>
       </ul>
     </article>
 
     <article>
-      <h2>3. Cookie-Kategorien</h2>
+      <h2>Cookies &amp; lokale Speicherung</h2>
       <ul>
-        <li><strong>Notwendige Cookies:</strong> Theme-Auswahl und Cookie-Präferenzen, damit die Seite korrekt funktioniert.</li>
-        <li><strong>Analyse-Cookies (optional):</strong> Nur nach aktiver Zustimmung zur Reichweitenmessung.</li>
+        <li>
+          <strong>Notwendige Speicherung:</strong> Ihre Cookie-Auswahl samt Zeitpunkt sowie Ihre Wahl zwischen hellem und dunklem Modus
+          werden im lokalen Speicher (Local Storage) Ihres Browsers abgelegt. Diese Daten werden nicht an uns übertragen.
+        </li>
+        <li>
+          <strong>Analyse-Cookies (optional):</strong> derzeit nicht im Einsatz. Sollten wir künftig Reichweitenmessung nutzen, geschieht
+          dies nur nach Ihrer aktiven Zustimmung.
+        </li>
       </ul>
       <p>Sie können Ihre Entscheidung jederzeit über den Link „Cookie-Einstellungen“ im Footer ändern.</p>
     </article>
 
     <article>
-      <h2>4. Speicherdauer</h2>
+      <h2>Schriftarten</h2>
+      <p>
+        Die verwendeten Schriftarten werden direkt von unserem Server ausgeliefert. Beim Aufruf der Website wird keine Verbindung zu
+        Servern von Google Fonts oder anderen Schriftanbietern hergestellt.
+      </p>
+    </article>
+
+    <!-- TODO(Betreiber): Abschnitt zum Hosting ergänzen (Anbieter, Anschrift, Server-Logfiles, Vertrag nach Art. 28 DSGVO). -->
+
+    <article *ngIf="usesRemoteContent">
+      <h2>Inhalte aus Google Cloud Firestore</h2>
+      <p>
+        Texte und Bilder dieser Website laden wir aus der Datenbank Google Cloud Firestore (Google Ireland Limited, Gordon House, Barrow
+        Street, Dublin 4, Irland). Dabei wird Ihre IP-Adresse an Google übermittelt; eine Übermittlung an Google LLC in den USA kann
+        nicht ausgeschlossen werden. Google LLC ist nach dem EU-U.S. Data Privacy Framework zertifiziert. Rechtsgrundlage ist Art. 6
+        Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer zuverlässigen Bereitstellung der Inhalte).
+      </p>
+    </article>
+
+    <article>
+      <h2>Speicherdauer</h2>
       <p>
         Wir speichern Daten nur so lange, wie sie für den jeweiligen Zweck erforderlich sind oder gesetzliche Aufbewahrungspflichten gelten.
-        Cookie-Präferenzen werden lokal im Browser gespeichert.
+        Einstellungen im lokalen Speicher bleiben erhalten, bis Sie sie in Ihrem Browser löschen.
       </p>
     </article>
 
     <article>
-      <h2>5. Empfänger & Drittlandtransfers</h2>
+      <h2>Empfänger &amp; Drittlandtransfers</h2>
       <p>
         Es werden nur Dienstleister eingesetzt, die vertraglich gebunden sind (Art. 28 DSGVO). Falls Daten außerhalb der EU/EWR übertragen
-        werden, erfolgen geeignete Garantien (z. B. EU-Standardvertragsklauseln).
+        werden, erfolgen geeignete Garantien (z.&nbsp;B. EU-Standardvertragsklauseln oder ein Angemessenheitsbeschluss).
       </p>
     </article>
 
     <article>
-      <h2>6. Ihre Rechte</h2>
+      <h2>Ihre Rechte</h2>
       <ul>
         <li>Auskunft (Art. 15 DSGVO)</li>
         <li>Berichtigung (Art. 16 DSGVO)</li>
@@ -64,7 +99,7 @@
     </article>
 
     <article>
-      <h2>7. Beschwerderecht</h2>
+      <h2>Beschwerderecht</h2>
       <p>
         Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde in der EU zu beschweren, insbesondere in Ihrem Aufenthalts- oder
         Arbeitsstaat.
@@ -72,7 +107,7 @@
     </article>
 
     <article>
-      <h2>8. Minderjährigenschutz</h2>
+      <h2>Minderjährigenschutz</h2>
       <p>
         Dieses Angebot richtet sich nicht gezielt an Kinder unter 16 Jahren. Sollten entsprechende Daten dennoch verarbeitet werden, erfolgt
         dies ausschließlich im Rahmen der gesetzlichen Vorgaben.
@@ -80,8 +115,8 @@
     </article>
 
     <article>
-      <h2>9. Aktualisierung dieser Hinweise</h2>
+      <h2>Aktualisierung dieser Hinweise</h2>
       <p>Wir prüfen diese Erklärung regelmäßig und passen sie bei rechtlichen oder technischen Änderungen an.</p>
     </article>
   </section>
-</main>
+</div>

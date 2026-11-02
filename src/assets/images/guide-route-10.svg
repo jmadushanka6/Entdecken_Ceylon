@@ -1,11 +1,30 @@
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
   <defs>
-    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0%' stop-color='#295c4d'/>
-      <stop offset='100%' stop-color='#d09b45'/>
+    <linearGradient id='sea' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0' stop-color='#cfe8e3'/>
+      <stop offset='1' stop-color='#9fcfcc'/>
     </linearGradient>
   </defs>
-  <rect width='800' height='500' fill='url(#g)'/>
-  <path d='M0 380 C160 310 320 430 480 350 C620 290 700 330 800 300 L800 500 L0 500 Z' fill='#154035' opacity='.65'/>
-  <circle cx='640' cy='130' r='44' fill='#ffe09a' opacity='.9'/>
+  <rect width='800' height='500' fill='url(#sea)'/>
+  <g stroke='#ffffff' stroke-width='3' stroke-linecap='round' fill='none' opacity='.5'>
+    <path d='M640 120 q18 -7 36 0 t36 0'/>
+    <path d='M660 380 q18 -7 36 0 t36 0'/>
+    <path d='M90 420 q18 -7 36 0 t36 0'/>
+  </g>
+  <g transform='translate(151.25 60.75) scale(.75)'>
+    <path d='M363 42 C385 48 405 70 428 103 C440 120 445 135 452 150 C462 165 470 172 476 184 C490 210 502 232 510 250 C518 262 524 272 527 290 C533 320 540 345 539 368 C537 382 526 392 513 398 C502 412 494 428 483 436 C470 443 462 446 452 449 C440 453 430 456 420 460 C410 466 404 469 396 468 C380 466 372 462 362 456 C352 444 342 428 336 408 C330 390 324 374 322 358 C321 346 320 338 321 328 C318 300 312 260 310 220 C310 190 318 160 327 135 C333 118 340 104 345 92 C338 82 326 72 322 61 C330 50 345 42 363 42 Z' fill='#a6cfa3' stroke='#f4faf4' stroke-width='6' stroke-linejoin='round'/>
+    <ellipse cx='428' cy='348' rx='46' ry='40' fill='#6ea77c'/>
+    <ellipse cx='424' cy='352' rx='24' ry='20' fill='#4f8a64'/>
+    <path d='M328 328 C360 300 395 262 421 246 C430 270 412 295 408 319 C414 335 418 345 423 356 C433 360 444 362 453 365 C440 400 410 440 392 458 C384 456 374 452 366 448 C350 420 335 370 328 328' fill='none' stroke='#c4553b' stroke-width='7' stroke-dasharray='12 8' stroke-linecap='round' stroke-linejoin='round'/>
+    <circle cx='328' cy='328' r='11' fill='#c4553b' stroke='#fff' stroke-width='4'/>
+    <circle cx='421' cy='246' r='11' fill='#c4553b' stroke='#fff' stroke-width='4'/>
+    <circle cx='408' cy='319' r='11' fill='#c4553b' stroke='#fff' stroke-width='4'/>
+    <circle cx='423' cy='356' r='11' fill='#c4553b' stroke='#fff' stroke-width='4'/>
+    <circle cx='453' cy='365' r='11' fill='#c4553b' stroke='#fff' stroke-width='4'/>
+    <circle cx='392' cy='458' r='11' fill='#c4553b' stroke='#fff' stroke-width='4'/>
+    <circle cx='366' cy='448' r='11' fill='#c4553b' stroke='#fff' stroke-width='4'/>
+  </g>
+  <rect x='60' y='185' width='250' height='130' rx='20' fill='#fffaf0'/>
+  <text x='185' y='262' font-family='Georgia, serif' font-size='56' font-weight='700' fill='#2e4f44' text-anchor='middle'>10 Tage</text>
+  <text x='185' y='294' font-family='Arial, sans-serif' font-size='16' letter-spacing='3' fill='#56786b' text-anchor='middle'>RUNDREISE</text>
 </svg>

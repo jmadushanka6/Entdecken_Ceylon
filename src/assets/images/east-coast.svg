@@ -1,0 +1,37 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
+  <defs>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#1f4f5c'/>
+      <stop offset='.6' stop-color='#c9876a'/>
+      <stop offset='1' stop-color='#f5c27c'/>
+    </linearGradient>
+    <linearGradient id='sea' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#3a7f8c'/>
+      <stop offset='1' stop-color='#1d5563'/>
+    </linearGradient>
+  </defs>
+  <rect width='800' height='500' fill='url(#sky)'/>
+  <circle cx='420' cy='280' r='62' fill='#ffd98e'/>
+  <rect y='280' width='800' height='220' fill='url(#sea)'/>
+  <g fill='#ffd98e' opacity='.75'>
+    <rect x='370' y='292' width='100' height='5' rx='2.5'/>
+    <rect x='385' y='308' width='70' height='5' rx='2.5'/>
+    <rect x='398' y='326' width='44' height='5' rx='2.5'/>
+    <rect x='408' y='346' width='24' height='4' rx='2'/>
+  </g>
+  <path d='M560 283 C590 252 620 238 660 234 C700 230 740 242 800 232 L800 300 L560 300 Z' fill='#2b3f3a'/>
+  <path d='M622 240 L630 214 L638 240 Z' fill='#2b3f3a'/>
+  <g fill='#1b2f2b'>
+    <path d='M250 372 C275 384 345 384 372 372 L364 382 C340 392 280 392 258 382 Z'/>
+    <rect x='308' y='300' width='4' height='74'/>
+    <rect x='214' y='348' width='40' height='6' rx='3'/>
+  </g>
+  <path d='M312 304 L312 366 L360 360 Z' fill='#f3e2bf'/>
+  <path d='M266 366 L236 352 M300 368 L236 352' stroke='#1b2f2b' stroke-width='3'/>
+  <g stroke='#9fd0cf' stroke-width='3' stroke-linecap='round' fill='none' opacity='.45'>
+    <path d='M80 420 q25 -8 50 0 t50 0'/>
+    <path d='M560 440 q25 -8 50 0 t50 0'/>
+    <path d='M430 470 q25 -8 50 0 t50 0'/>
+  </g>
+  <path d='M0 452 C120 432 220 447 320 472 C360 482 380 492 390 500 L0 500 Z' fill='#e7c98f'/>
+</svg>

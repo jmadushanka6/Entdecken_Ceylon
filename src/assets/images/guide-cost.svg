@@ -1,11 +1,26 @@
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
   <defs>
-    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0%' stop-color='#295c4d'/>
-      <stop offset='100%' stop-color='#d09b45'/>
+    <linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0' stop-color='#f4e7c8'/>
+      <stop offset='1' stop-color='#cfe2cf'/>
     </linearGradient>
   </defs>
-  <rect width='800' height='500' fill='url(#g)'/>
-  <path d='M0 380 C160 310 320 430 480 350 C620 290 700 330 800 300 L800 500 L0 500 Z' fill='#154035' opacity='.65'/>
-  <circle cx='640' cy='130' r='44' fill='#ffe09a' opacity='.9'/>
+  <rect width='800' height='500' fill='url(#bg)'/>
+  <circle cx='130' cy='110' r='80' fill='#fff' opacity='.25'/>
+  <circle cx='690' cy='420' r='110' fill='#fff' opacity='.2'/>
+  <g transform='rotate(-12 330 255)'>
+    <rect x='180' y='185' width='290' height='145' rx='12' fill='#5f9472'/>
+    <rect x='196' y='201' width='258' height='113' rx='8' fill='none' stroke='#e8f1e4' stroke-width='3' opacity='.7'/>
+    <circle cx='325' cy='257' r='30' fill='#e8f1e4' opacity='.5'/>
+  </g>
+  <g transform='rotate(5 360 270)'>
+    <rect x='215' y='200' width='290' height='145' rx='12' fill='#d6a85a'/>
+    <rect x='231' y='216' width='258' height='113' rx='8' fill='none' stroke='#fff6e3' stroke-width='3' opacity='.75'/>
+    <text x='360' y='290' font-family='Georgia, serif' font-size='56' font-weight='700' fill='#fff6e3' text-anchor='middle'>Rs</text>
+  </g>
+  <circle cx='588' cy='262' r='40' fill='#c99a45'/>
+  <circle cx='588' cy='262' r='30' fill='none' stroke='#f7e3b4' stroke-width='3'/>
+  <circle cx='545' cy='330' r='56' fill='#e2b65e'/>
+  <circle cx='545' cy='330' r='43' fill='none' stroke='#fff1c9' stroke-width='4'/>
+  <text x='545' y='350' font-family='Georgia, serif' font-size='54' font-weight='700' fill='#fff8e6' text-anchor='middle'>€</text>
 </svg>

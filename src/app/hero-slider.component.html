@@ -1,0 +1,43 @@
+<section class="hero" aria-label="Einführung">
+  <div class="hero__slider">
+    <img
+      *ngFor="let slide of slides; let i = index"
+      class="hero__image"
+      [class.hero__image--active]="i === currentSlideIndex"
+      [src]="slide.src"
+      [alt]="slide.alt"
+      [attr.aria-hidden]="i === currentSlideIndex ? null : 'true'"
+      [attr.fetchpriority]="i === 0 ? 'high' : null"
+      decoding="async"
+    />
+  </div>
+  <div class="hero__overlay"></div>
+
+  <div class="hero__content container">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="hero__controls" role="group" aria-label="Steuerung der Bildergalerie" *ngIf="slides.length > 1">
+    <button class="hero__control" type="button" (click)="previousSlide()" aria-label="Vorheriges Bild">‹</button>
+    <div class="hero__center">
+      <button
+        *ngFor="let slide of slides; let i = index"
+        type="button"
+        class="hero__dot"
+        [class.hero__dot--active]="i === currentSlideIndex"
+        [attr.aria-label]="'Bild ' + (i + 1) + ' von ' + slides.length"
+        [attr.aria-pressed]="i === currentSlideIndex"
+        (click)="goToSlide(i)"
+      ></button>
+      <button
+        class="hero__control hero__control--small"
+        type="button"
+        (click)="toggleAutoplay()"
+        [attr.aria-label]="isAutoplayPaused ? 'Automatischen Bildwechsel starten' : 'Automatischen Bildwechsel anhalten'"
+      >
+        {{ isAutoplayPaused ? '▶' : '❚❚' }}
+      </button>
+    </div>
+    <button class="hero__control" type="button" (click)="nextSlide()" aria-label="Nächstes Bild">›</button>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <section class="site-footer__about" aria-label="Über Entdecken Ceylon">
+      <p class="site-footer__brand">Entdecken Ceylon</p>
+      <p>Inspiration, Routen und praktische Tipps für Ihre Sri-Lanka-Reise – ruhig, strukturiert und ohne Verkaufsdruck.</p>
+    </section>
+
+    <nav aria-labelledby="footer-planung">
+      <h2 id="footer-planung">Reiseplanung</h2>
+      <ul>
+        <li *ngFor="let link of planningLinks"><a [routerLink]="link.path">{{ link.label }}</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="footer-entdecken">
+      <h2 id="footer-entdecken">Entdecken</h2>
+      <ul>
+        <li *ngFor="let link of discoverLinks"><a [routerLink]="link.path">{{ link.label }}</a></li>
+        <li><a routerLink="/" fragment="haeufige-fragen">Häufige Fragen</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="footer-service">
+      <h2 id="footer-service">Service &amp; Rechtliches</h2>
+      <ul>
+        <li><a routerLink="/kontakt">Kontakt</a></li>
+        <li><a routerLink="/impressum">Impressum</a></li>
+        <li><a routerLink="/datenschutz">Datenschutz</a></li>
+        <li><button type="button" class="footer-button" (click)="cookieSettings.emit()">Cookie-Einstellungen</button></li>
+        <li><a routerLink="/sitemap">Sitemap</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>
+      © {{ currentYear }} Entdecken Ceylon · Alle Angaben ohne Gewähr. Maßgeblich für Einreise und Sicherheit sind die aktuellen
+      Hinweise der Behörden, z.&nbsp;B. des
+      <a [href]="foreignOfficeUrl" target="_blank" rel="noopener noreferrer">Auswärtigen Amts</a>.
+    </p>
+  </div>
+</footer>

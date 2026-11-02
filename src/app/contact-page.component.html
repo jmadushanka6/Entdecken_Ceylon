@@ -1,0 +1,35 @@
+<div class="page-shell prose">
+  <p class="kicker">Kontakt</p>
+  <h1>Schreiben Sie uns</h1>
+  <p>
+    Sie haben eine Frage zur Reiseplanung, einen Hinweis auf veraltete Informationen oder einen Fehler entdeckt? Wir freuen uns
+    über Ihre Nachricht – gerade Rückmeldungen von unterwegs helfen, die Reiseinfos aktuell zu halten.
+  </p>
+
+  <dl class="facts">
+    <div>
+      <dt>E-Mail</dt>
+      <dd><a [href]="'mailto:' + operator.email">{{ operator.email }}</a></dd>
+    </div>
+    <div *ngIf="operator.phone">
+      <dt>Telefon</dt>
+      <dd>{{ operator.phone }}</dd>
+    </div>
+  </dl>
+
+  <aside class="callout">
+    <p>
+      Verbindliche Auskünfte zu Einreise und Sicherheit erhalten Sie beim
+      <a [href]="sources.germany.url" target="_blank" rel="noopener noreferrer">Auswärtigen Amt</a>, beim
+      <a [href]="sources.austria.url" target="_blank" rel="noopener noreferrer">BMEIA</a> (Österreich) bzw. beim
+      <a [href]="sources.switzerland.url" target="_blank" rel="noopener noreferrer">EDA</a> (Schweiz).
+    </p>
+  </aside>
+
+  <h2>Datenschutz</h2>
+  <p>
+    Wenn Sie uns per E-Mail schreiben, verarbeiten wir Ihre Angaben ausschließlich zur Bearbeitung Ihrer Anfrage. Details finden
+    Sie in unserer <a routerLink="/datenschutz">Datenschutzerklärung</a>. Angaben zum Anbieter stehen im
+    <a routerLink="/impressum">Impressum</a>.
+  </p>
+</div>

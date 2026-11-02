@@ -1,0 +1,96 @@
+.hero {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: min(40rem, 86vh);
+  overflow: hidden;
+}
+
+.hero__slider,
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 450ms ease;
+}
+
+.hero__image--active {
+  opacity: 1;
+}
+
+.hero__overlay {
+  background: linear-gradient(95deg, rgb(14 35 30 / 78%) 28%, rgb(14 35 30 / 35%) 60%, rgb(14 35 30 / 20%) 100%);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  padding-block: 3rem 5rem;
+}
+
+.hero__controls {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 1.25rem;
+  bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero__center {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.hero__control {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 999px;
+  background: rgb(18 31 28 / 60%);
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.hero__control--small {
+  width: 1.9rem;
+  height: 1.9rem;
+  margin-left: 0.3rem;
+  font-size: 0.7rem;
+}
+
+.hero__dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 45%);
+  cursor: pointer;
+}
+
+.hero__dot--active {
+  background: #fff;
+}
+
+@media (width <= 640px) {
+  .hero {
+    min-height: 36rem;
+  }
+
+  .hero__controls {
+    inset-inline: 0.75rem;
+  }
+}

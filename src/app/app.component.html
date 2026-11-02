@@ -1,34 +1,29 @@
+<a class="skip-link" href="#inhalt" (click)="skipToContent($event)">Zum Inhalt springen</a>
+
 <div class="app-shell">
-  <button
-    class="theme-toggle"
-    type="button"
-    (click)="toggleTheme()"
-    [attr.aria-pressed]="isDarkTheme"
-    [attr.aria-label]="isDarkTheme ? 'Helles Theme aktivieren' : 'Dunkles Theme aktivieren'"
+  <app-site-header [isDarkTheme]="isDarkTheme" (themeToggle)="toggleTheme()"></app-site-header>
+
+  <main id="inhalt" class="app-main" tabindex="-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-site-footer (cookieSettings)="openCookieSettings()"></app-site-footer>
+
+  <aside
+    class="cookie-banner"
+    *ngIf="showCookieBanner"
+    role="dialog"
+    aria-labelledby="cookie-banner-title"
+    aria-live="polite"
   >
-    {{ isDarkTheme ? '☀️ Helles Theme' : '🌙 Dunkles Theme' }}
-  </button>
-
-  <router-outlet></router-outlet>
-
-  <footer class="site-footer">
-    <div class="container">
-      <a routerLink="/impressum">Impressum</a>
-      <a routerLink="/datenschutz">Datenschutz</a>
-      <button type="button" class="footer-button" (click)="openCookieSettings()">Cookie-Einstellungen</button>
-      <a routerLink="/kontakt">Kontakt</a>
-      <a routerLink="/sitemap">Sitemap</a>
-    </div>
-  </footer>
-
-  <aside class="cookie-banner" *ngIf="showCookieBanner" aria-label="Cookie Einwilligung" role="dialog" aria-live="polite">
-    <h2>Ihre Privatsphäre in der EU</h2>
+    <h2 id="cookie-banner-title">Cookies &amp; Datenschutz</h2>
     <p>
-      Wir verwenden nur notwendige Cookies für die Grundfunktionen. Mit Ihrer Zustimmung aktivieren wir zusätzlich
-      Analyse-Cookies. Sie können Ihre Auswahl jederzeit über „Cookie-Einstellungen“ im Footer ändern.
+      Wir speichern in Ihrem Browser nur, was technisch nötig ist – etwa Ihre Wahl zwischen hellem und dunklem Modus.
+      Analyse-Cookies setzen wir ausschließlich mit Ihrer Einwilligung ein. Ihre Auswahl können Sie jederzeit über
+      „Cookie-Einstellungen“ im Footer ändern.
     </p>
     <div class="cookie-banner__actions">
-      <button type="button" class="btn btn--secondary" (click)="acceptEssentialCookies()">Nur notwendige Cookies</button>
+      <button type="button" class="btn btn--primary" (click)="acceptEssentialCookies()">Nur notwendige Cookies</button>
       <button type="button" class="btn btn--primary" (click)="acceptAllCookies()">Alle Cookies akzeptieren</button>
     </div>
     <p class="cookie-banner__link">

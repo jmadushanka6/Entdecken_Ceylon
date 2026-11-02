@@ -1,0 +1,28 @@
+<div class="page-shell prose">
+  <p class="kicker">Übersicht</p>
+  <h1>Sitemap</h1>
+  <p>Alle Seiten von Entdecken Ceylon auf einen Blick.</p>
+
+  <h2>Start</h2>
+  <ul>
+    <li><a routerLink="/">Startseite</a></li>
+  </ul>
+
+  <p *ngIf="isLoading" aria-live="polite">Inhalte werden geladen …</p>
+
+  <ng-container *ngFor="let group of groups">
+    <h2>{{ group.label }}</h2>
+    <ul>
+      <li *ngFor="let link of group.links">
+        <a [routerLink]="link.path">{{ link.title }}</a>
+      </li>
+    </ul>
+  </ng-container>
+
+  <h2>Service &amp; Rechtliches</h2>
+  <ul>
+    <li *ngFor="let link of serviceLinks">
+      <a [routerLink]="link.path">{{ link.title }}</a>
+    </li>
+  </ul>
+</div>

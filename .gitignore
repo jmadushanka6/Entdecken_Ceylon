@@ -4,6 +4,7 @@
 # Angular build artifacts
 /dist
 /.angular
+/coverage
 
 # IDE files
 .vscode/

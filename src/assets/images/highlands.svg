@@ -1,11 +1,33 @@
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
   <defs>
-    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0%' stop-color='#295c4d'/>
-      <stop offset='100%' stop-color='#d09b45'/>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#cfe4d6'/>
+      <stop offset='1' stop-color='#f3e4c2'/>
     </linearGradient>
+    <path id='row1' d='M-40 300 C120 236 280 252 410 292 C540 332 650 276 840 252' fill='none'/>
+    <path id='row2' d='M-40 392 C140 332 320 352 470 392 C600 426 700 388 840 366' fill='none'/>
+    <clipPath id='hill1'><path d='M0 290 C150 228 290 246 410 286 C540 328 650 270 800 246 L800 500 L0 500 Z'/></clipPath>
+    <clipPath id='hill2'><path d='M0 386 C160 330 330 348 470 386 C600 420 700 384 800 362 L800 500 L0 500 Z'/></clipPath>
   </defs>
-  <rect width='800' height='500' fill='url(#g)'/>
-  <path d='M0 380 C160 310 320 430 480 350 C620 290 700 330 800 300 L800 500 L0 500 Z' fill='#154035' opacity='.65'/>
-  <circle cx='640' cy='130' r='44' fill='#ffe09a' opacity='.9'/>
+  <rect width='800' height='500' fill='url(#sky)'/>
+  <circle cx='560' cy='118' r='40' fill='#fbe3a6'/>
+  <path d='M0 236 C110 160 250 172 350 205 C460 240 560 168 680 160 C735 157 770 168 800 178 L800 500 L0 500 Z' fill='#a7c9ae'/>
+  <path d='M0 290 C150 228 290 246 410 286 C540 328 650 270 800 246 L800 500 L0 500 Z' fill='#5f9b70'/>
+  <g clip-path='url(#hill1)' stroke='#4a8559' stroke-width='9' stroke-linecap='round'>
+    <use href='#row1' y='12'/><use href='#row1' y='40'/><use href='#row1' y='68'/><use href='#row1' y='96'/>
+    <use href='#row1' y='124'/><use href='#row1' y='152'/><use href='#row1' y='180'/>
+  </g>
+  <g stroke='#4b3a26' stroke-width='4' stroke-linecap='round'>
+    <path d='M300 300 V250'/><path d='M520 322 V262'/><path d='M640 300 V252'/>
+  </g>
+  <g fill='#2d5e40'>
+    <ellipse cx='300' cy='242' rx='14' ry='22'/>
+    <ellipse cx='520' cy='252' rx='16' ry='26'/>
+    <ellipse cx='640' cy='243' rx='13' ry='21'/>
+  </g>
+  <path d='M-20 272 C200 254 500 286 820 259' stroke='#fff' stroke-opacity='.28' stroke-width='26' fill='none' stroke-linecap='round'/>
+  <path d='M0 386 C160 330 330 348 470 386 C600 420 700 384 800 362 L800 500 L0 500 Z' fill='#3d7a52'/>
+  <g clip-path='url(#hill2)' stroke='#2f6643' stroke-width='10' stroke-linecap='round'>
+    <use href='#row2' y='14'/><use href='#row2' y='44'/><use href='#row2' y='74'/><use href='#row2' y='104'/>
+  </g>
 </svg>
