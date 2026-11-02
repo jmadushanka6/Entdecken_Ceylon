@@ -12,7 +12,7 @@ export interface FirebaseClientConfig {
 /**
  * Replace all placeholder values with your Firebase Web App configuration.
  * You can copy these from Firebase Console > Project settings > Your apps.
- * See README.md ("Firebase einrichten") for the remaining setup steps.
+ * See README.md ("Firebase setup") for the remaining setup steps.
  */
 export const firebaseClientConfig: FirebaseClientConfig = {
   apiKey: 'YOUR_FIREBASE_API_KEY',
