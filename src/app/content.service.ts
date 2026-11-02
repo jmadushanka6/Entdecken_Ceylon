@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, delay, from, map, of, throwError } from 'rxjs';
-import { firebaseClientConfig } from './firebase.config';
+import { AdminAuthService } from './admin-auth.service';
+import { FIREBASE_CONFIG, isFirebaseConfigured } from './firebase.config';
 
 export interface ContentPage {
   uri: string;
   title: string;
   description: string;
   heroImageUrl: string;
+  /** Alternativtext für das Titelbild; leer lassen, wenn das Bild rein dekorativ ist. */
+  heroImageAlt?: string;
   customCss: string;
   bodyHtml?: string;
   /** ISO-Datum (YYYY-MM-DD) der letzten inhaltlichen Prüfung, angezeigt als „Stand“. */
@@ -42,6 +45,9 @@ export class ContentService {
    * damit die Startseite schlank bleibt.
    */
   private builtInPages = new Map<string, ContentPage>();
+
+  private readonly firebase = inject(FIREBASE_CONFIG);
+  private readonly auth = inject(AdminAuthService);
 
   constructor() {
     this.initializePages();
@@ -199,14 +205,12 @@ export class ContentService {
 
     const response = await fetch(this.documentUrl(page.uri), {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: await this.authorizedHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ fields: this.toFirestoreFields(page) })
     });
 
     if (!response.ok) {
-      throw new Error('Failed to save content in Firestore.');
+      throw new Error(ContentService.describeWriteError(response.status, 'save'));
     }
   }
 
@@ -215,15 +219,37 @@ export class ContentService {
       return;
     }
 
-    const response = await fetch(this.documentUrl(uri), { method: 'DELETE' });
+    const response = await fetch(this.documentUrl(uri), {
+      method: 'DELETE',
+      headers: await this.authorizedHeaders()
+    });
 
     if (response.status === 404) {
       return;
     }
 
     if (!response.ok) {
-      throw new Error('Failed to delete content in Firestore.');
+      throw new Error(ContentService.describeWriteError(response.status, 'delete'));
     }
+  }
+
+  /** Writes must carry the admin's Firebase ID token; firestore.rules only allow listed admins. */
+  private async authorizedHeaders(headers: Record<string, string> = {}): Promise<Record<string, string>> {
+    const idToken = await this.auth.getIdToken();
+
+    if (!idToken) {
+      throw new Error('Your admin session has expired. Please sign in again.');
+    }
+
+    return { ...headers, Authorization: `Bearer ${idToken}` };
+  }
+
+  private static describeWriteError(status: number, action: 'save' | 'delete'): string {
+    if (status === 401 || status === 403) {
+      return `Not allowed to ${action} content. Check that your account's UID is listed in firestore.rules.`;
+    }
+
+    return `Failed to ${action} content in Firestore (HTTP ${status}).`;
   }
 
   private loadPagesFromStorage(): ContentPage[] {
@@ -272,6 +298,7 @@ export class ContentService {
       typeof candidate.title === 'string' &&
       typeof candidate.description === 'string' &&
       typeof candidate.heroImageUrl === 'string' &&
+      (typeof candidate.heroImageAlt === 'undefined' || typeof candidate.heroImageAlt === 'string') &&
       typeof candidate.customCss === 'string' &&
       (typeof candidate.bodyHtml === 'undefined' || typeof candidate.bodyHtml === 'string') &&
       (typeof candidate.lastReviewed === 'undefined' || typeof candidate.lastReviewed === 'string')
@@ -279,26 +306,19 @@ export class ContentService {
   }
 
   private hasFirebaseConfig(): boolean {
-    return (
-      typeof firebaseClientConfig.apiKey === 'string' &&
-      firebaseClientConfig.apiKey.length > 0 &&
-      !firebaseClientConfig.apiKey.startsWith('YOUR_FIREBASE_') &&
-      typeof firebaseClientConfig.projectId === 'string' &&
-      firebaseClientConfig.projectId.length > 0 &&
-      !firebaseClientConfig.projectId.startsWith('YOUR_FIREBASE_')
-    );
+    return isFirebaseConfigured(this.firebase);
   }
 
   private collectionUrl(): string {
-    return `${this.firestoreBaseUrl()}/${ContentService.FIRESTORE_COLLECTION}?key=${firebaseClientConfig.apiKey}`;
+    return `${this.firestoreBaseUrl()}/${ContentService.FIRESTORE_COLLECTION}?key=${this.firebase.apiKey}`;
   }
 
   private documentUrl(uri: string): string {
-    return `${this.firestoreBaseUrl()}/${ContentService.FIRESTORE_COLLECTION}/${encodeURIComponent(uri)}?key=${firebaseClientConfig.apiKey}`;
+    return `${this.firestoreBaseUrl()}/${ContentService.FIRESTORE_COLLECTION}/${encodeURIComponent(uri)}?key=${this.firebase.apiKey}`;
   }
 
   private firestoreBaseUrl(): string {
-    return `https://firestore.googleapis.com/v1/projects/${firebaseClientConfig.projectId}/databases/${ContentService.FIRESTORE_DATABASE_ID}/documents`;
+    return `https://firestore.googleapis.com/v1/projects/${this.firebase.projectId}/databases/${ContentService.FIRESTORE_DATABASE_ID}/documents`;
   }
 
   private toFirestoreFields(page: ContentPage): Record<string, { stringValue: string }> {
@@ -307,6 +327,7 @@ export class ContentService {
       title: { stringValue: page.title },
       description: { stringValue: page.description },
       heroImageUrl: { stringValue: page.heroImageUrl },
+      heroImageAlt: { stringValue: page.heroImageAlt ?? '' },
       customCss: { stringValue: page.customCss },
       bodyHtml: { stringValue: page.bodyHtml ?? '' },
       lastReviewed: { stringValue: page.lastReviewed ?? '' }
@@ -317,12 +338,14 @@ export class ContentService {
     const fields = documentValue.fields ?? {};
     const bodyHtml = fields['bodyHtml']?.stringValue ?? '';
     const lastReviewed = fields['lastReviewed']?.stringValue ?? '';
+    const heroImageAlt = fields['heroImageAlt']?.stringValue ?? '';
 
     const page: ContentPage = {
       uri: fields['uri']?.stringValue ?? '',
       title: fields['title']?.stringValue ?? '',
       description: fields['description']?.stringValue ?? '',
       heroImageUrl: fields['heroImageUrl']?.stringValue ?? '',
+      heroImageAlt: heroImageAlt || undefined,
       customCss: fields['customCss']?.stringValue ?? '',
       bodyHtml: bodyHtml || undefined,
       lastReviewed: lastReviewed || undefined

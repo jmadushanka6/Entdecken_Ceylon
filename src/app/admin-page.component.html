@@ -1,20 +1,29 @@
 <section class="admin-page">
   <h1>Create Content Page</h1>
 
-  <ng-container *ngIf="!isAuthenticated; else adminPanel">
+  <section class="notice" *ngIf="mode === 'unavailable'">
+    <h2>Editing is not available</h2>
+    <p>
+      Firebase is not configured for this build, so content cannot be saved. Add your Firebase project to
+      <code>src/app/firebase.config.ts</code> and follow the steps in the README (section “Firebase einrichten”).
+    </p>
+  </section>
+
+  <ng-container *ngIf="mode === 'firebase' && !isAuthenticated">
     <section class="login-card">
-      <h2>Admin Login</h2>
+      <h2>Admin sign-in</h2>
+      <p class="hint">Use the Firebase Authentication account whose UID is listed in <code>firestore.rules</code>.</p>
 
       <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
         <label>
-          Username
-          <input type="text" formControlName="username" autocomplete="username" />
+          Email
+          <input type="email" formControlName="email" autocomplete="username" />
         </label>
-        <p
-          class="error"
-          *ngIf="loginForm.controls.username.touched && loginForm.controls.username.errors?.['required']"
-        >
-          Username is required.
+        <p class="error" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.['required']">
+          Email is required.
+        </p>
+        <p class="error" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.['email']">
+          Please enter a valid email address.
         </p>
 
         <label>
@@ -28,17 +37,24 @@
           Password is required.
         </p>
 
-        <button type="submit">Login</button>
+        <button type="submit" [disabled]="isSigningIn">{{ isSigningIn ? 'Signing in...' : 'Sign in' }}</button>
       </form>
 
       <p class="error" *ngIf="loginErrorMessage">{{ loginErrorMessage }}</p>
     </section>
   </ng-container>
 
+  <ng-container *ngIf="isAuthenticated" [ngTemplateOutlet]="adminPanel"></ng-container>
+
   <ng-template #adminPanel>
-    <div class="admin-header">
-      <p class="login-state">Logged in as admin</p>
-      <button type="button" class="secondary" (click)="logout()">Logout</button>
+    <p class="notice notice--local" *ngIf="mode === 'local'">
+      <strong>Local mode (development build):</strong> Firebase is not configured, so pages are saved only in this
+      browser and are not visible to visitors.
+    </p>
+
+    <div class="admin-header" *ngIf="mode === 'firebase'">
+      <p class="login-state">Signed in as {{ auth.email() }}</p>
+      <button type="button" class="secondary" (click)="logout()">Sign out</button>
     </div>
 
     <section class="templates-list">
@@ -124,6 +140,11 @@
       <label>
         Hero Image URL
         <input type="url" formControlName="heroImageUrl" placeholder="https://..." />
+      </label>
+
+      <label>
+        Hero image alt text (optional – describe the photo; leave empty for decorative images)
+        <input type="text" formControlName="heroImageAlt" placeholder="e.g. Tea pickers on a hillside near Nuwara Eliya" />
       </label>
 
       <label>

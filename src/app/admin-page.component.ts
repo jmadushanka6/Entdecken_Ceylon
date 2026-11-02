@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, isDevMode } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,13 +8,25 @@ import {
   Validators
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { AdminAuthService } from './admin-auth.service';
 import { ContentPage, ContentService } from './content.service';
 import { ThemedDialogService } from './themed-dialog.service';
 
 interface AdminPageDraft {
   version: 1;
-  value: Omit<ContentPage, 'bodyHtml' | 'lastReviewed'> & { bodyHtml: string; lastReviewed: string };
+  value: Omit<ContentPage, 'bodyHtml' | 'lastReviewed' | 'heroImageAlt'> & {
+    bodyHtml: string;
+    lastReviewed: string;
+    heroImageAlt: string;
+  };
 }
+
+/**
+ * firebase: Firebase is configured – sign in with a Firebase Authentication account.
+ * local: development build without Firebase – pages are stored only in this browser.
+ * unavailable: production build without Firebase – editing is disabled.
+ */
+export type AdminMode = 'firebase' | 'local' | 'unavailable';
 
 interface TemplateTreeNode {
   segment: string;
@@ -32,10 +44,12 @@ interface TemplateTreeNode {
 })
 export class AdminPageComponent implements OnInit, OnDestroy {
   private static readonly DRAFT_STORAGE_KEY = 'admin-page-draft';
-  private static readonly AUTH_STORAGE_KEY = 'admin-page-authenticated';
-  private static readonly ADMIN_USERNAME = 'admin';
-  private static readonly ADMIN_PASSWORD = 'admin';
+  /** Flag of the former hard-coded login; removed on load. */
+  private static readonly LEGACY_AUTH_STORAGE_KEY = 'admin-page-authenticated';
 
+  readonly mode: AdminMode;
+
+  isSigningIn = false;
   isSubmitting = false;
   isDeleting = false;
   successMessage = '';
@@ -49,7 +63,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
   readonly expandedUris = new Set<string>();
 
   readonly loginForm = this.formBuilder.nonNullable.group({
-    username: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
   });
 
@@ -65,6 +79,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     title: ['', [Validators.required]],
     description: ['', [Validators.required]],
     heroImageUrl: [''],
+    heroImageAlt: [''],
     customCss: [''],
     bodyHtml: [''],
     lastReviewed: ['', [Validators.pattern('^\\d{4}-\\d{2}-\\d{2}$')]]
@@ -76,18 +91,21 @@ export class AdminPageComponent implements OnInit, OnDestroy {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly contentService: ContentService,
-    private readonly themedDialogService: ThemedDialogService
-  ) {}
+    private readonly themedDialogService: ThemedDialogService,
+    readonly auth: AdminAuthService
+  ) {
+    this.mode = auth.isConfigured ? 'firebase' : isDevMode() ? 'local' : 'unavailable';
+  }
 
   ngOnInit(): void {
+    try {
+      localStorage.removeItem(AdminPageComponent.LEGACY_AUTH_STORAGE_KEY);
+    } catch {
+      // Storage unavailable – nothing to clean up.
+    }
+
     if (this.isAuthenticated) {
-      this.restoreDraft();
-      this.startDraftPersistence();
-      this.pagesSubscription = this.contentService.pagesLoaded$.subscribe((isLoaded) => {
-        if (isLoaded) {
-          this.loadTemplateTree();
-        }
-      });
+      this.startEditing();
     }
   }
 
@@ -97,11 +115,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
   }
 
   get isAuthenticated(): boolean {
-    if (typeof localStorage === 'undefined') {
-      return false;
-    }
-
-    return localStorage.getItem(AdminPageComponent.AUTH_STORAGE_KEY) === 'true';
+    return this.mode === 'local' || (this.mode === 'firebase' && this.auth.isSignedIn());
   }
 
   get previewPayload(): ContentPage {
@@ -109,6 +123,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
 
     return {
       ...formValue,
+      heroImageAlt: formValue.heroImageAlt?.trim() || undefined,
       bodyHtml: formValue.bodyHtml?.trim() || undefined,
       lastReviewed: formValue.lastReviewed?.trim() || undefined
     };
@@ -142,6 +157,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
       title: page.title,
       description: page.description,
       heroImageUrl: page.heroImageUrl,
+      heroImageAlt: page.heroImageAlt ?? '',
       customCss: page.customCss,
       bodyHtml: page.bodyHtml ?? '',
       lastReviewed: page.lastReviewed ?? ''
@@ -149,7 +165,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
     this.pageForm.controls.uri.updateValueAndValidity();
   }
 
-  login(): void {
+  async login(): Promise<void> {
     this.loginErrorMessage = '';
 
     if (this.loginForm.invalid) {
@@ -157,35 +173,22 @@ export class AdminPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const { username, password } = this.loginForm.getRawValue();
+    const { email, password } = this.loginForm.getRawValue();
+    this.isSigningIn = true;
 
-    if (
-      username === AdminPageComponent.ADMIN_USERNAME &&
-      password === AdminPageComponent.ADMIN_PASSWORD
-    ) {
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(AdminPageComponent.AUTH_STORAGE_KEY, 'true');
-      }
-
+    try {
+      await this.auth.signIn(email.trim(), password);
       this.loginForm.reset();
-      this.restoreDraft();
-      this.startDraftPersistence();
-      this.pagesSubscription?.unsubscribe();
-      this.pagesSubscription = this.contentService.pagesLoaded$.subscribe((isLoaded) => {
-        if (isLoaded) {
-          this.loadTemplateTree();
-        }
-      });
-      return;
+      this.startEditing();
+    } catch (error) {
+      this.loginErrorMessage = error instanceof Error ? error.message : 'Sign-in failed. Please try again.';
+    } finally {
+      this.isSigningIn = false;
     }
-
-    this.loginErrorMessage = 'Invalid username or password.';
   }
 
   logout(): void {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem(AdminPageComponent.AUTH_STORAGE_KEY);
-    }
+    this.auth.signOut();
 
     this.draftSubscription?.unsubscribe();
     this.pagesSubscription?.unsubscribe();
@@ -292,6 +295,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
       title: page.title,
       description: page.description,
       heroImageUrl: page.heroImageUrl,
+      heroImageAlt: page.heroImageAlt ?? '',
       customCss: page.customCss,
       bodyHtml: page.bodyHtml ?? '',
       lastReviewed: page.lastReviewed ?? ''
@@ -340,6 +344,17 @@ export class AdminPageComponent implements OnInit, OnDestroy {
 
   trackNode(_: number, node: TemplateTreeNode): string {
     return node.fullUri;
+  }
+
+  private startEditing(): void {
+    this.restoreDraft();
+    this.startDraftPersistence();
+    this.pagesSubscription?.unsubscribe();
+    this.pagesSubscription = this.contentService.pagesLoaded$.subscribe((isLoaded) => {
+      if (isLoaded) {
+        this.loadTemplateTree();
+      }
+    });
   }
 
   private startDraftPersistence(): void {
@@ -430,6 +445,7 @@ export class AdminPageComponent implements OnInit, OnDestroy {
         title: typeof parsed.value.title === 'string' ? parsed.value.title : '',
         description: typeof parsed.value.description === 'string' ? parsed.value.description : '',
         heroImageUrl: typeof parsed.value.heroImageUrl === 'string' ? parsed.value.heroImageUrl : '',
+        heroImageAlt: typeof parsed.value.heroImageAlt === 'string' ? parsed.value.heroImageAlt : '',
         customCss: typeof parsed.value.customCss === 'string' ? parsed.value.customCss : '',
         bodyHtml: typeof parsed.value.bodyHtml === 'string' ? parsed.value.bodyHtml : '',
         lastReviewed: typeof parsed.value.lastReviewed === 'string' ? parsed.value.lastReviewed : ''

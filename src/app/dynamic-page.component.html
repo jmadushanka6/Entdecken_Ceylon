@@ -30,7 +30,7 @@
             class="dynamic-page__hero-image"
             [class.dynamic-page__hero-image--hidden]="isHeroImageLoading"
             [src]="page.heroImageUrl"
-            alt=""
+            [alt]="page.heroImageAlt ?? ''"
             decoding="async"
             (load)="onHeroImageLoaded()"
             (error)="onHeroImageLoaded()"
